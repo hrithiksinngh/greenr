@@ -1,0 +1,44 @@
+@import "../../styles/variables.scss";
+
+.mainCard {
+  background: $primary-white;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+
+  .cardContent {
+    padding: 18px 20px 18px 20px;
+  }
+}
+
+.imgStyle {
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  height: 160px !important;
+}
+
+.modalMain {
+  background-color: $primary-white;
+  display: flex;
+  justify-self: center;
+}
+
+.modalClose {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+.modalMainDiv {
+  position: fixed;
+  top: 6rem;
+  left: 8rem;
+}
+@media screen and (max-width: 1024px) {
+  .modalMain {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .modalMainDiv {
+    left: 0rem;
+  }
+}

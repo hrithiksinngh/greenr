@@ -1,0 +1,161 @@
+@import "../../styles/variables.scss";
+
+.headerMain {
+  height: 70px;
+  // border: 1px solid;
+  background-color: transparent !important;
+}
+
+.btnContainer {
+  order: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dropdownStyle {
+  a {
+    padding: 4px;
+    border: none;
+    border-bottom: 2px solid;
+    border-color: $primary;
+    transition: border-width 0.6s linear;
+    transition-timing-function: linear;
+    transition-duration: 0.15s;
+    &:hover {
+      color: $primary-black;
+      padding: 4px;
+      background-color: $primary-white;
+      border-bottom: 2px solid;
+      border-color: $primary;
+      // font-weight: 700 !important;
+    }
+  }
+}
+
+.patternDropdown {
+  a {
+    padding: 4px;
+    border: none;
+    border-bottom: 2px solid;
+    border-color: $primary;
+    color: $primary-white;
+    &:hover {
+      color: $primary-white;
+      // padding: 4px;
+      background-color: $primary;
+      border-bottom: 2px solid;
+      border-color: $primary-white;
+      // font-weight: 600 !important;
+    }
+  }
+}
+
+.patternSecondaryBtn {
+  font-size: 14px;
+  border: 1px solid;
+  border-color: $primary-white;
+  color: $primary-white;
+  &:hover {
+    // background-color: $primary-white;
+    // border-color: $primary-white;
+    // color: $primary-black;
+    border: 2px solid;
+  }
+}
+
+.patternPrimaryBtn {
+  font-size: 14px;
+  background-color: $primary-white;
+  border: 1px solid;
+  border-color: $primary-white;
+  color: black !important;
+  &.large {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  &:hover {
+    // background-color: transparent;
+    // border: 1px solid;
+    // border-color: $primary-white;
+    // color: $primary-white !important;
+    // background-color: $primary;
+    border: 2px solid;
+    border-color: $primary-white;
+  }
+}
+
+.logoMain {
+  width: 160px;
+  height: 42px;
+}
+.mobileLogo {
+  width: 36px;
+  height: 42px;
+}
+.hamburger {
+  padding-left: 0 !important;
+  background-color: transparent !important;
+  &:focus,
+  &:active {
+    background-color: transparent !important;
+    --tw-ring-opacity: 0 !important;
+  }
+  svg {
+    fill: $primary-white;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .headerMain > div {
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 766px) {
+  .btnContainer {
+    order: unset;
+  }
+  // .dropdownStyle {
+  //   position: absolute;
+  //   top: 70px;
+  //   left: 0;
+  //   right: 0;
+  // }
+  .patternDropdown {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    // border: 1px solid red;
+    background-color: $primary;
+    box-shadow: 0 3px 3px 0 rgb(0 0 0 / 15%);
+    ul {
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+    a {
+      padding: 10px;
+      border: none;
+      // border-bottom: 2px solid;
+      // border-color: transparent;
+      // color: $primary-white;
+      // background-image: url(../../assets/Images/patternBg.png);
+      background-color: $primary;
+      padding-left: 20px !important;
+      &:hover {
+        color: $primary-white;
+        padding-left: 20px;
+        font-weight: 800;
+        // background-color: transparent;
+        border-bottom: none;
+        // border-color: $primary-white;
+        // font-weight: 600 !important;
+      }
+    }
+  }
+}

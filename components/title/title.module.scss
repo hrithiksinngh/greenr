@@ -1,0 +1,13 @@
+@import '../../styles/variables.scss';
+
+.mainTitle {
+  font-family: $font-secondary;
+  font-weight: lighter;
+  font-weight: 700;
+}
+
+@media only screen and (max-width: 480px) {
+  .mainTitle {
+    font-size: 26px;
+  }
+}

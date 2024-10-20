@@ -1,0 +1,11 @@
+@import '../../styles/variables.scss';
+
+.footer {
+  background-color: $primary;
+  color: $primary-white;
+}
+
+.copyright {
+  border-top: 1px solid;
+  border-color: $primary-white;
+}

@@ -1,0 +1,108 @@
+@import '../../styles/variables.scss';
+
+.cardSocials {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.imgStyle {
+  z-index: 1;
+  width: 227.32px !important;
+  height: 227.32px !important;
+}
+
+.cardMain {
+  // position: relative;
+  // display: flex;
+  // align-items: center;
+  &.imgRight {
+    flex-direction: row-reverse;
+  }
+  .cardContent {
+    background: $primary-white;
+    position: absolute;
+    padding-bottom: 20px;
+  }
+  .socialsRow {
+    display: flex;
+    right: -3px;
+    z-index: 3;
+  }
+}
+
+.imgRight {
+  .borderGradient {
+    background: linear-gradient(
+      -90deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1)
+    );
+  }
+  .cardContent {
+    right: 160px;
+    padding-right: 120px;
+    padding-left: 30px;
+    text-align: right;
+  }
+  .socialsRow {
+    justify-content: flex-end;
+  }
+  .cardRefText {
+    text-align: left;
+  }
+}
+
+.imgLeft {
+  .borderGradient {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+  .cardContent {
+    left: 160px;
+    padding-left: 120px;
+    padding-right: 30px;
+    text-align: left;
+  }
+  .cardRefText {
+    text-align: right;
+  }
+}
+
+.imgBorder {
+  width: 261px;
+  height: 261px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gradientInner {
+  border: 14px solid;
+  border-color: $primary;
+  border-radius: 50%;
+}
+
+.borderGradient {
+  // background: linear-gradient(
+  //   90deg,
+  //   rgba(51, 150, 82, 1),
+  //   rgba(51, 150, 82, 0)
+  // );
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.cardTitle {
+  // font-weight: 600;
+  // font-size: 16px;
+  // font-family: $font-secondary;
+}
+
+.cardDesc {
+  // font-size: 14px;
+  font-family: $font-primary;
+}
