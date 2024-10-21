@@ -35,9 +35,6 @@ const filters = {
   sectors: ['Agriculture', 'Building and Construction', 'Decorations', 'Energy', 'Food and Beverages', 'Service Industry', 'Stationery']
 };
 
-// Add this import at the top of the file
-import { motion, AnimatePresence } from 'framer-motion';
-
 // Add this helper function at the top of your component, outside the ProductListing function
 const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -54,8 +51,6 @@ export default function ProductListing() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
   const [isTypeOfWasteOpen, setIsTypeOfWasteOpen] = useState(true);
   const [isSectorsOpen, setIsSectorsOpen] = useState(true);
-
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const productsPerPage = 8;
 
@@ -145,12 +140,11 @@ export default function ProductListing() {
     </svg>
   );
 
-  useEffect(() => {
-    if (isAnimating) {
-      const timer = setTimeout(() => setIsAnimating(false), 300); // Match this to your transition duration
-      return () => clearTimeout(timer);
+  const switchView = (newView) => {
+    if (newView !== view) {
+      setView(newView);
     }
-  }, [isAnimating]);
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -164,53 +158,6 @@ export default function ProductListing() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [sortDropdownRef]);
-
-  const switchView = (newView) => {
-    if (newView !== view) {
-      setIsAnimating(true);
-      setView(newView);
-    }
-  };
-
-  // Add these animation variants
-  const containerVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: 1,
-      transition: { 
-        duration: 0.5,
-        staggerChildren: 0.05 
-      } 
-    },
-    exit: { opacity: 0 }
-  };
-
-  const cardVariants = {
-    grid: {
-      flexDirection: 'column',
-    },
-    list: {
-      flexDirection: 'row',
-    },
-    hover: {
-      scale: 1.02,
-      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
-      // border: "1px solid #4d7297", // Add a border color change on hover
-      transition: {
-        duration: 0.3,
-      },
-    },
-  };
-
-  const imageVariants = {
-    grid: { width: '100%', height: '12rem' },
-    list: { width: '30%', height: 'auto' }
-  };
-
-  const contentVariants = {
-    grid: { width: '100%' },
-    list: { width: '70%' }
-  };
 
   const handleClearSearch = () => {
     setSearchTerm('');
@@ -499,78 +446,62 @@ export default function ProductListing() {
 
         {/* Product Listings */}
         <div className="w-full md:w-3/4">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={view}
-              variants={containerVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className={`${view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2' : 'flex flex-col'} gap-4 md:gap-6`}
-            >
-              {currentProducts.map(product => (
-                <motion.div
-                  key={product.id}
-                  layout
-                  variants={cardVariants}
-                  initial={view}
-                  animate={view}
-                  whileHover="hover"
-                  transition={{ duration: 0.3 }}
-                  className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'}`}
+          <div
+            className={`${view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2' : 'flex flex-col'} gap-4 md:gap-6`}
+          >
+            {currentProducts.map(product => (
+              <div
+                key={product.id}
+                className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'}`}
+              >
+                <img
+                  src={product.img}
+                  alt={product.title}
+                  className={`object-cover ${view === 'list' ? 'w-1/3 h-auto' : 'w-full h-48 sm:h-56'}`}
+                />
+                <div
+                  className={`p-4 sm:p-4 md:p-6 flex flex-col ${view === 'list' ? 'w-2/3' : 'w-full'}`}
                 >
-                  <motion.img
-                    variants={imageVariants}
-                    src={product.img}
-                    alt={product.title}
-                    className={`object-cover ${view === 'list' ? 'w-1/3 h-auto' : 'w-full h-48 sm:h-56'}`}
-                  />
-                  <motion.div
-                    variants={contentVariants}
-                    className={`p-4 sm:p-4 md:p-6 flex flex-col justify-between ${view === 'list' ? 'w-2/3' : 'w-full'} lg:h-full`} // Increased padding for mobile
-                  >
-                    <div className="flex-grow">
-                      <motion.div layout className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2 mb-2 md:mb-4">
-                        {product.tags.map(tag => (
-                          <motion.span
-                            key={tag}
-                            layout
-                            className="bg-[#f5f5f5] text-[#000000D9] text-[0.6rem] sm:text-[0.65rem] md:text-[0.7rem] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-xl"
-                          >
-                            {tag}
-                          </motion.span>
-                        ))}
-                      </motion.div>
-                      <motion.h3 layout className="font-semibold text-sm md:text-lg mb-1">{product.title}</motion.h3>
-                      <motion.p layout className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer">
-                        <BsGlobe className="mr-1 sm:mr-1.5" size={12} color="#3449B2" />
-                        {product.company}
-                      </motion.p>
-                      <motion.p 
-                        layout 
-                        className="text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] mb-2 md:mb-4 line-clamp-2 overflow-hidden"
-                        style={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                        }}
-                      >
-                        {product.description}
-                      </motion.p>
+                  <div className="flex flex-col h-full">
+                    <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2 mb-2 md:mb-4">
+                      {product.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="bg-[#f5f5f5] text-[#000000D9] text-[0.6rem] sm:text-[0.65rem] md:text-[0.7rem] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-xl"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                    <motion.button
-                      layout
+                    <h3 className="font-semibold text-sm md:text-lg mb-1">{product.title}</h3>
+                    <p className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer">
+                      <BsGlobe className="mr-1 sm:mr-1.5" size={12} color="#3449B2" />
+                      {product.company}
+                    </p>
+                    <p 
+                      className="text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] mb-2 md:mb-4 line-clamp-2 overflow-hidden"
+                      style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}
+                    >
+                      {product.description}
+                    </p>
+                  </div>
+                  <div className="mt-auto">
+                    <button
                       className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
                       onClick={() => window.location.href = `/portfolio/${product.title.toLowerCase().replace(/ /g, '-')}`}
                     >
                       View Factsheet
                       <FaChevronRight className="ml-1 sm:ml-2" size={10} />
-                    </motion.button>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* Pagination */}
           {filteredProducts.length > 0 ? (
