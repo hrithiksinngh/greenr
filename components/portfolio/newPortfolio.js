@@ -48,6 +48,7 @@ export default function ProductListing() {
   const [selectedFilters, setSelectedFilters] = useState({});
   const [sortBy, setSortBy] = useState('Type of Waste');  // Change default value
   const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
@@ -211,8 +212,19 @@ export default function ProductListing() {
     list: { width: '70%' }
   };
 
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
-    <div className="container mx-auto px-2 sm:px-4">
+    <div className="container mx-auto sm:px-4">
       {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-xs mb-3 md:mb-6">
         <Link href="/" className="text-[#000000] cursor-pointer">Home</Link>
@@ -348,14 +360,23 @@ export default function ProductListing() {
               <div className="md:mt-0">
                 {/* Search functionality */}
                 <div className="relative mb-4">
-                  <CiSearch className="absolute top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
+                    ref={searchInputRef}
                     type="text" 
                     placeholder='Search by "State/Company"'
-                    className="w-full pl-6 pr-4 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
+                    className="w-full pl-8 pr-8 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleSearchChange}
                   />
+                  {searchTerm && (
+                    <button
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      onClick={handleClearSearch}
+                    >
+                      <FaTimes size={16} />
+                    </button>
+                  )}
                 </div>
 
                 {/* Divider line */}
@@ -525,7 +546,17 @@ export default function ProductListing() {
                         <BsGlobe className="mr-1 sm:mr-1.5" size={12} color="#3449B2" />
                         {product.company}
                       </motion.p>
-                      <motion.p layout className="text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] mb-2 md:mb-4 line-clamp-2 sm:line-clamp-3">{product.description}</motion.p>
+                      <motion.p 
+                        layout 
+                        className="text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] mb-2 md:mb-4 line-clamp-2 overflow-hidden"
+                        style={{
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                        }}
+                      >
+                        {product.description}
+                      </motion.p>
                     </div>
                     <motion.button
                       layout

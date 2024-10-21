@@ -492,7 +492,7 @@ consumption.</strong></p>`,
         </div>
       </div> */}
       <div className="w-full py-10 mb-10 mt-16">
-        <h1 className="grid-main-container text-3xl font-bold mb-10 px-4 sm:px-10">Entrepreneur Wins Testimonials</h1>
+        <h1 className="grid-main-container text-3xl font-bold mb-10 px-4">Entrepreneur Wins Testimonials</h1>
         <TestimonialCarousel />
       </div>
     </>

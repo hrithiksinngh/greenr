@@ -13,12 +13,18 @@ const ProductCard = ({ product, view }) => {
     maxHeight: '2.4em', // 2 lines * 1.2em line-height
   };
 
+  const titleStyle = {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
   if (view === 'grid') {
     return (
       <div className="p-1 h-full">
         <div className="bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-lg transition-all duration-300 w-full h-full flex flex-col hover:scale-[1.02] hover:shadow-lg">
           <img src={product.img} alt={product.title} className="w-full h-40 object-cover" />
-          <div className="p-4 flex flex-col flex-grow">
+          <div className="p-6 flex flex-col flex-grow">
             <div className="flex flex-wrap gap-2 mb-2">
               {product.tags.slice(0, 2).map(tag => (
                 <span key={tag} className="bg-[#f5f5f5] text-[#000000D9] text-[0.65rem] px-2.5 py-1.5 rounded-xl">
@@ -26,7 +32,7 @@ const ProductCard = ({ product, view }) => {
                 </span>
               ))}
             </div>
-            <h3 className="font-semibold text-lg mb-1" style={descriptionStyle}>{product.title}</h3>
+            <h3 className="font-semibold text-lg mb-1" style={titleStyle} title={product.title}>{product.title}</h3>
             <p className="text-xs text-[#3449B2] mb-2 flex items-center cursor-pointer">
               <BsGlobe className="mr-1 flex-shrink-0" size={12} color="#3449B2" />
               <span className="truncate">{product.company}</span>
@@ -45,7 +51,7 @@ const ProductCard = ({ product, view }) => {
       <div className="p-1">
         <div className="flex bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.01]">
           <img src={product.img} alt={product.title} className="w-[45%] object-cover" />
-          <div className="p-4 w-3/4 pl-6 flex flex-col">
+          <div className="p-6 w-3/4 pl-8 flex flex-col">
             <div className="flex flex-wrap gap-2 mb-4">
               {product.tags.map(tag => (
                 <span key={tag} className="bg-[#f5f5f5] text-[#000000D9] text-[0.65rem] px-2.5 py-1.5 rounded-xl">
@@ -53,7 +59,7 @@ const ProductCard = ({ product, view }) => {
                 </span>
               ))}
             </div>
-            <h3 className="font-semibold text-lg mb-2" style={descriptionStyle}>{product.title}</h3>
+            <h3 className="font-semibold text-lg mb-2" style={titleStyle} title={product.title}>{product.title}</h3>
             <p className="text-xs text-[#3449B2] mb-2 flex items-center cursor-pointer">
               <BsGlobe className="mr-1" size={12} color="#3449B2" />
               <span className="truncate">{product.company}</span>

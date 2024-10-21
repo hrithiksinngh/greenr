@@ -7,7 +7,7 @@ const testimonials = [
     title: "CEO of Company",
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
+    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
     avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
@@ -16,7 +16,7 @@ const testimonials = [
     title: "Founder of Startup",
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
+    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
     avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
@@ -25,7 +25,7 @@ const testimonials = [
     title: "Entrepreneur",
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
+    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
     avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
@@ -34,7 +34,7 @@ const testimonials = [
     title: "Entrepreneur",
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
+    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
     avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
 ];

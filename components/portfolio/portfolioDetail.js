@@ -323,7 +323,7 @@ const PortfolioDetail = () => {
       <div className="grid-main-container pt-12 lg:pt80">
         <div className="grid-container">
           <div className="statsContainer pt-8 lg:pt30 overflow-hidden">
-            <div className="relative grid p-3 grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10">
+            <div className="relative grid p-3 grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-10">
               {keyMileStoneList.map((statsData, i) => (
                 <Stats
                   key={i}
@@ -360,11 +360,11 @@ const PortfolioDetail = () => {
             {infoItems.map((item, index) => (
               <div key={index} className={`flex items-center space-x-4 relative p-4 lg:p-6 pb-3 pl-0 ${index % 2 !== 0 ? 'md:pl-10' : ''}`}>
                 <div className={`bg-[#6B9080] p-2 lg:p-3 rounded-full`}>
-                  <item.icon className="w-4 h-4 lg:w-6 lg:h-6 text-white" />
+                  <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                 </div>
                 <div className="flex-grow mt-4 lg:mt-8">
-                  <p className="text-xs lg:text-sm text-[#6B9080]">{item.title}</p>
-                  <p className="font-semibold text-gray-800 text-sm lg:text-base">{item.value}</p>
+                  <p className="text-sm lg:text-lg text-[#6B9080]">{item.title}</p>
+                  <p className="font-semibold text-gray-800 text-base lg:text-xl">{item.value}</p>
                 </div>
                 {/* Right border for left column items (desktop only) */}
                 {index % 2 === 0 && index < 5 && (
@@ -414,7 +414,7 @@ const PortfolioDetail = () => {
         <div className="overflow-x-auto pb-4 hide-scrollbar">
           <div className="flex space-x-4 lg:space-x-6 px-4 lg:pl-6 w-max">
             {mockProducts.map((product) => (
-              <div key={product.id} className="w-[280px] sm:w-[300px] lg:w-[380px] h-[450px] flex-shrink-0">
+              <div key={product.id} className="w-[300px] sm:w-[300px] lg:w-[380px] h-[450px] flex-shrink-0">
                 <ProductCard product={product} view={"grid"} />
               </div>
             ))}
