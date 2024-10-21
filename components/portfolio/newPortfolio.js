@@ -40,6 +40,29 @@ const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 };
 
+// Add this new component for the mobile search
+const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef }) => (
+  <div className="relative mb-4 md:hidden">
+    <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <input
+      ref={searchInputRef}
+      type="text" 
+      placeholder='Search by "State/Company"'
+      className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
+      value={searchTerm}
+      onChange={handleSearchChange}
+    />
+    {searchTerm && (
+      <button
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+        onClick={handleClearSearch}
+      >
+        <FaTimes size={16} />
+      </button>
+    )}
+  </div>
+);
+
 export default function ProductListing() {
   const [view, setView] = useState('grid');
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -185,7 +208,7 @@ export default function ProductListing() {
         <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-0">Explore innovative green companies scaling to mitigate environmental degradation</p>
         <div className="flex flex-col md:flex-row w-full md:w-auto">
           {/* Mobile view: Sort and Filter buttons */}
-          <div className="flex justify-between items-center mb-3 md:hidden w-full">
+          <div className="flex justify-between items-center mb-2 md:mb-0 md:hidden w-full">
             {/* Custom Sort Dropdown */}
             <div className="relative flex-grow mr-2" ref={sortDropdownRef}>
               <button
@@ -285,6 +308,16 @@ export default function ProductListing() {
         </div>
       </div>
 
+      {/* Add MobileSearch component here with reduced top margin */}
+      <div className="md:hidden -mt-2 mb-4">
+        <MobileSearch 
+          searchTerm={searchTerm}
+          handleSearchChange={handleSearchChange}
+          handleClearSearch={handleClearSearch}
+          searchInputRef={searchInputRef}
+        />
+      </div>
+
       {/* Main Content */}
       <div className="flex flex-col md:flex-row gap-4 md:gap-8">
         {/* Filter Section */}
@@ -305,8 +338,8 @@ export default function ProductListing() {
             <div className="flex-grow overflow-y-auto p-4">
               {/* Filter Content Wrapper */}
               <div className="md:mt-0">
-                {/* Search functionality */}
-                <div className="relative mb-4">
+                {/* Desktop search functionality - hide on mobile */}
+                <div className="relative mb-4 hidden md:block">
                   <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     ref={searchInputRef}
@@ -326,8 +359,8 @@ export default function ProductListing() {
                   )}
                 </div>
 
-                {/* Divider line */}
-                <hr className="border-t border-gray-200 mb-4" />
+                {/* Divider line - hidden on mobile */}
+                <hr className="border-t border-gray-200 mb-4 hidden md:block" />
 
                 {/* Selected Filters */}
                 {Object.keys(selectedFilters).length > 0 && (
@@ -361,8 +394,8 @@ export default function ProductListing() {
                         )}
                       </div>
                     </div>
-                    {/* Divider line after Filter Products */}
-                    <hr className="border-t border-gray-200 mb-4" />
+                    {/* Divider line after Filter Products - hidden on mobile */}
+                    <hr className="border-t border-gray-200 mb-4 hidden md:block" />
                   </>
                 )}
 
@@ -390,7 +423,7 @@ export default function ProductListing() {
                       </div>
                     )}
                   </div>
-                  <hr className="border-gray-200 mb-6" /> {/* Changed border color */}
+                  <hr className="border-gray-200 mb-6" />
 
                   {/* Type of Waste filter */}
                   <div className="mb-6">
@@ -414,7 +447,7 @@ export default function ProductListing() {
                       </div>
                     )}
                   </div>
-                  <hr className="border-gray-200 mb-6" /> {/* Changed border color */}
+                  <hr className="border-gray-200 mb-6" />
 
                   {/* Sectors filter */}
                   <div className="mb-6">
