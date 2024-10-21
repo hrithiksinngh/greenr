@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const testimonials = [
   {
@@ -42,29 +42,52 @@ const testimonials = [
 const TestimonialCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+  const carouselRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640); // 640px is the 'sm' breakpoint in Tailwind
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextTestimonial = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-      setIsAnimating(false);
-    }, 300); // This should match the transition duration in CSS
+    if (isMobile) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+        setIsAnimating(false);
+      }, 300);
+    } else {
+      const container = carouselRef.current;
+      const cardWidth = container.children[0].offsetWidth;
+      container.scrollBy({ left: cardWidth + 16, behavior: 'smooth' }); // 16px for gap
+    }
   };
 
   const prevTestimonial = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
-      setIsAnimating(false);
-    }, 300); // This should match the transition duration in CSS
+    if (isMobile) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+        setIsAnimating(false);
+      }, 300);
+    } else {
+      const container = carouselRef.current;
+      const cardWidth = container.children[0].offsetWidth;
+      container.scrollBy({ left: -cardWidth - 16, behavior: 'smooth' }); // 16px for gap
+    }
   };
 
   const renderTestimonial = (testimonial, index) => (
     <div 
       key={testimonial.id} 
       className={`bg-white shadow-md rounded-lg w-full sm:w-80 flex-shrink-0 flex flex-col 
-        ${index !== currentIndex ? 'hidden sm:flex' : ''}
-        transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
+        ${isMobile && index !== currentIndex ? 'hidden' : ''}
+        ${isMobile ? `transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}` : ''}`}
     >
       {testimonial.type === "youtube" && (
         <iframe
@@ -96,7 +119,11 @@ const TestimonialCarousel = () => {
   const ArrowButton = ({ direction, onClick }) => (
     <button
       onClick={onClick}
-      className="hover:bg-gray-100 text-[#4C7297] font-bold p-2 border border-[#4C7297] rounded-full focus:outline-none focus:ring-2 focus:ring-[#4C7297]"
+      className={`
+        text-[#4C7297] font-bold p-2 border border-[#4C7297] rounded-full
+        sm:hover:bg-transparent sm:focus:outline-none sm:focus:ring-0
+        ${isMobile ? 'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4C7297]' : ''}
+      `}
       disabled={isAnimating}
     >
       <svg
@@ -118,10 +145,13 @@ const TestimonialCarousel = () => {
 
   return (
     <div className="w-full overflow-hidden">
-      <div className="px-4 sm:flex sm:space-x-4 sm:px-10 sm:pb-4 sm:overflow-x-auto hide-scrollbar">
+      <div 
+        ref={carouselRef}
+        className="px-4 sm:flex sm:space-x-4 sm:px-10 sm:pb-4 sm:overflow-x-auto hide-scrollbar"
+      >
         {testimonials.map((testimonial, index) => renderTestimonial(testimonial, index))}
       </div>
-      <div className="flex justify-center mt-4 space-x-4 sm:hidden">
+      <div className="flex justify-center mt-4 space-x-4">
         <ArrowButton direction="left" onClick={prevTestimonial} />
         <ArrowButton direction="right" onClick={nextTestimonial} />
       </div>
