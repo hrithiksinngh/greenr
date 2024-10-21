@@ -16,7 +16,7 @@ const ProductCard = ({ product, view }) => {
   if (view === 'grid') {
     return (
       <div className="p-1 h-full">
-        <div className="bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-xl transition-all duration-300 w-full h-full flex flex-col hover:scale-[1.02] hover:shadow-2xl">
+        <div className="bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-lg transition-all duration-300 w-full h-full flex flex-col hover:scale-[1.02] hover:shadow-lg">
           <img src={product.img} alt={product.title} className="w-full h-40 object-cover" />
           <div className="p-4 flex flex-col flex-grow">
             <div className="flex flex-wrap gap-2 mb-2">
