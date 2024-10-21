@@ -8,7 +8,7 @@ const testimonials = [
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
     text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
-    avatar: "https://via.placeholder.com/50", // Add this line for each testimonial
+    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const testimonials = [
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
     text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
-    avatar: "https://via.placeholder.com/50", // Add this line for each testimonial
+    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const testimonials = [
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
     text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
-    avatar: "https://via.placeholder.com/50", // Add this line for each testimonial
+    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ const testimonials = [
     type: "youtube", // Can be 'image', 'video', or 'youtube'
     src: "https://youtube.com/embed/OZEnys-tDDY",
     text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto. I highly recommend Sypto for everyone who wants to invest in crypto and have a peace of mind at the same time.",
-    avatar: "https://via.placeholder.com/50", // Add this line for each testimonial
+    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
   },
 ];
 

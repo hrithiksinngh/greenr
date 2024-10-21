@@ -41,6 +41,15 @@ const Carousel = (props) => {
     }
   }, [isChanging]);
 
+  // Add new useEffect for auto-changing slides
+  useEffect(() => {
+    const autoChangeTimer = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    return () => clearInterval(autoChangeTimer);
+  }, [currentSlide]);
+
   const changeSlide = (index) => {
     setIsChanging(true);
     setTimeout(() => {
@@ -94,7 +103,7 @@ const Carousel = (props) => {
             Let's Connect
           </button>
           {/* Navigation buttons - mobile view (aligned with Let's Connect button) */}
-          <div className="flex gap-8 ml-4 md:hidden">
+          {/* <div className="flex gap-8 ml-4 md:hidden">
             <button
               onClick={prevSlide}
               className="text-white text-2xl px-2 py-1"
@@ -107,7 +116,7 @@ const Carousel = (props) => {
             >
               &#10095;
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
