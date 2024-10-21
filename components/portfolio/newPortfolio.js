@@ -452,7 +452,7 @@ export default function ProductListing() {
             {currentProducts.map(product => (
               <div
                 key={product.id}
-                className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'}`}
+                className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'} transform hover:-translate-y-1 hover:scale-[1.02]`}
               >
                 <img
                   src={product.img}
