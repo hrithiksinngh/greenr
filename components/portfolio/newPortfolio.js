@@ -322,7 +322,7 @@ export default function ProductListing() {
       <div className="flex flex-col md:flex-row gap-4 md:gap-8">
         {/* Filter Section */}
         <div className={`w-full md:w-1/4 fixed md:static top-0 left-0 h-full md:h-auto z-50 md:z-0 bg-white md:bg-transparent transition-transform duration-300 ease-in-out transform ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-          <div className="bg-[#FFFFFF] h-full md:h-auto flex flex-col">
+          <div className="bg-[#FFFFFF] h-full md:h-auto flex flex-col md:rounded-lg md:border md:border-gray-200 md:shadow-sm">
             {/* Sticky header for mobile */}
             <div className="md:hidden sticky top-0 bg-white z-10 p-4 border-b border-gray-200">
               <button
@@ -345,7 +345,7 @@ export default function ProductListing() {
                     ref={searchInputRef}
                     type="text" 
                     placeholder='Search by "State/Company"'
-                    className="w-full pl-8 pr-8 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
+                    className="w-full pl-8 pr-0 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
