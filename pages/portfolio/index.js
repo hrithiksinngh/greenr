@@ -22,7 +22,7 @@ const Portfolio = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <div className="grid-main-container pt60 mb60">
+        <div className="grid-main-container pt60 mb-0 md:mb-60">
           {/* <MainPortfolio /> */}
           <ProductListing />
         </div>
