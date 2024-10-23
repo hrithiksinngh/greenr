@@ -73,66 +73,69 @@ const Carousel = (props) => {
   });
 
   return (
-    <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 md:p-32 md:pl-40 md:pb-20 flex flex-col md:flex-row justify-between items-center shadow-lg">
-      {/* Image section */}
-      <div className="relative w-full md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
-        <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
-          <Image
-            src={slides[currentSlide].image}
-            alt={`${slides[currentSlide].name} Image`}
-            width={400}
-            height={400}
-            className="w-full h-auto max-w-[300px] md:max-w-[400px]"
-          />
+    <div className="relative">
+      <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-8 pt-8 md:pt-4 md:pt-32 md:p-32 md:pl-40 md:pb-20 flex flex-col md:flex-row justify-between items-center shadow-lg">
+        {/* Image section */}
+        <div className="relative w-full md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
+          <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
+            <Image
+              src={slides[currentSlide].image}
+              alt={`${slides[currentSlide].name} Image`}
+              width={400}
+              height={400}
+              className="w-full h-auto max-w-[300px] md:max-w-[400px]"
+            />
+          </div>
         </div>
+
+        {/* Text section */}
+        <div className="w-full md:w-1/2 relative order-2 md:order-1">
+          <div className="relative">
+            <h2 className={`text-2xl md:text-4xl font-bold mb-4 relative z-10 transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
+              {slides[currentSlide].name}
+            </h2>
+            <span className="absolute -top-10 md:-top-20 -left-3 md:-left-20 text-[60px] md:text-[120px] text-[#4b637b] opacity-30 z-0"><ImQuotesLeft /></span>
+          </div>
+          <p className={`text-sm md:text-md leading-6 mb-6 font-arimo transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
+            {slides[currentSlide].text}
+          </p>
+          <div className="flex items-center justify-between">
+            <button className="bg-[#6B9080] text-white font-semibold py-2 px-6 rounded-lg transition duration-300" onClick={handleConnect}>
+              Let's Connect
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation buttons - desktop view (hidden on mobile) */}
+        <button
+          onClick={prevSlide}
+          className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
+        >
+          &#10094;
+        </button>
+        <button
+          onClick={nextSlide}
+          className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
+        >
+          &#10095;
+        </button>
       </div>
 
-      {/* Text section */}
-      <div className="w-full md:w-1/2 relative order-2 md:order-1">
-        <div className="relative">
-          <h2 className={`text-2xl md:text-4xl font-bold mb-4 relative z-10 transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
-            {slides[currentSlide].name}
-          </h2>
-          <span className="absolute -top-10 md:-top-20 -left-3 md:-left-20 text-[60px] md:text-[120px] text-[#4b637b] opacity-30 z-0"><ImQuotesLeft /></span>
-        </div>
-        <p className={`text-sm md:text-md leading-6 mb-6 font-arimo transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
-          {slides[currentSlide].text}
-        </p>
-        <div className="flex items-center justify-between">
-          <button className="bg-[#6B9080] text-white font-semibold py-2 px-6 rounded-lg transition duration-300" onClick={handleConnect}>
-            Let's Connect
-          </button>
-          {/* Navigation buttons - mobile view (aligned with Let's Connect button) */}
-          {/* <div className="flex gap-8 ml-4 md:hidden">
-            <button
-              onClick={prevSlide}
-              className="text-white text-2xl px-2 py-1"
-            >
-              &#10094;
-            </button>
-            <button
-              onClick={nextSlide}
-              className="text-white text-2xl px-2 py-1"
-            >
-              &#10095;
-            </button>
-          </div> */}
-        </div>
+      {/* Navigation buttons - mobile view (outside and below the container) */}
+      <div className="flex justify-center w-full mt-4 md:hidden">
+        <button
+          onClick={prevSlide}
+          className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center mr-4 shadow-md"
+        >
+          &#10094;
+        </button>
+        <button
+          onClick={nextSlide}
+          className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center shadow-md"
+        >
+          &#10095;
+        </button>
       </div>
-
-      {/* Navigation buttons - desktop view (hidden on mobile) */}
-      <button
-        onClick={prevSlide}
-        className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
-      >
-        &#10094;
-      </button>
-      <button
-        onClick={nextSlide}
-        className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
-      >
-        &#10095;
-      </button>
     </div>
   );
 };
