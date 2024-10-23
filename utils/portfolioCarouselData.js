@@ -5,6 +5,10 @@ const fetchPortfolioData = (data) => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio`);
 };
 
+const fetchPortfolioDataResponse = (data) => {
+  return axios.get(`https://server2.getgreenr.org/api/portfolio/portfolio-response`);
+};
+
 const fetchCohortOneData = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/cohort-one`);
 };
@@ -70,6 +74,21 @@ export const UseCohortThreeData = (heroId) => {
       const data = queryClient
         .getQueryData("user-heroes")
         ?.data?.find((data) => data.id === parseInt(heroId));
+      if (data) {
+        return { data: data };
+      } else {
+        return undefined;
+      }
+    },
+  });
+};
+
+export const UseOurPortfolioData = () => {
+  const queryClient = useQueryClient();
+  return useQuery(["ourPortfolio"], fetchPortfolioDataResponse, {
+    initialData: () => {
+      const data = queryClient
+        .getQueryData("ourPortfolio")
       if (data) {
         return { data: data };
       } else {
