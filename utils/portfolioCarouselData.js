@@ -5,8 +5,12 @@ const fetchPortfolioData = (data) => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio`);
 };
 
-const fetchPortfolioDataResponse = (data) => {
+const fetchPortfolioDataResponse = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/portfolio-response`);
+};
+
+const fetchFoundersCarouselData = () => {
+  return axios.get(`https://server2.getgreenr.org/api/portfolio/founders-carousel`);
 };
 
 const fetchCohortOneData = () => {
@@ -95,5 +99,19 @@ export const UseOurPortfolioData = () => {
         return undefined;
       }
     },
+  });
+};
+
+export const UseFoundersCarouselData = () => {
+  const queryClient = useQueryClient();
+  return useQuery(["foundersCarousel"], fetchFoundersCarouselData, {
+    initialData: () => {
+      const data = queryClient.getQueryData("foundersCarousel");
+      if (data) {
+        return { data: data };
+      } else {
+        return undefined;
+      }
+    }
   });
 };

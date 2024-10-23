@@ -15,13 +15,15 @@ import ProductCard from "../ProductCard/ProductCard";
 import StackedImage from "../StackedImageCarousel";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { mockProducts } from "../../utils/data";
-import { UseOurPortfolioData } from "../../utils/portfolioCarouselData";
+import { UseOurPortfolioData, UseFoundersCarouselData } from "../../utils/portfolioCarouselData";
 const PortfolioDetail = ({ portfolioName }) => {
 
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
+  const { isLoading: foundersCarouselLoading, data: foundersCarouselData } = UseFoundersCarouselData();
   const [matchedPortfolio, setMatchedPortfolio] = useState(null);
   const [similarCompanies, setSimilarCompanies] = useState([]);
+
+  console.log("Founders Carousel Data:", foundersCarouselLoading, foundersCarouselData);
 
   console.log("Portfolio Name:", portfolioName);
   console.log("Portfolio Data:", isLoading, portfolioData);
@@ -430,9 +432,9 @@ const PortfolioDetail = ({ portfolioName }) => {
         <Marquee imgSrcList={ourPartnerImgData && ourPartnerImgData} />
       </div>
       
-      <div className="flex items-center justify-center bg-gray-100">
-        <Carousel handleConnect={()=>setIsOpen(true)}/>
-      </div>
+      {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
+        <Carousel handleConnect={()=>setIsOpen(true)} slides={foundersCarouselData?.data?.response}/>
+      </div>}
       
       <LetsConnectModal isOpen={isOpen} setIsOpen={setIsOpen} />
       
