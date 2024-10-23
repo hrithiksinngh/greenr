@@ -571,7 +571,10 @@ export default function ProductListing() {
                         ))}
                       </div>
                       <h3 className="font-semibold text-sm md:text-lg mb-1">{product.startupTitle}</h3>
-                      <p className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer">
+                      <p 
+                        className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer"
+                        onClick={() => window.open(product.websiteLink, '_blank', 'noopener,noreferrer')}
+                      >
                         <BsGlobe className="mr-1 sm:mr-1.5" size={12} color="#3449B2" />
                         {product.companyName}
                       </p>

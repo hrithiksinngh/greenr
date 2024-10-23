@@ -16,8 +16,15 @@ import StackedImage from "../StackedImageCarousel";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { mockProducts } from "../../utils/data";
+import { UseOurPortfolioData } from "../../utils/portfolioCarouselData";
+const PortfolioDetail = ({ portfolioName }) => {
 
-const PortfolioDetail = () => {
+  const { isLoading, data: portfolioData } = UseOurPortfolioData();
+  const [matchedPortfolio, setMatchedPortfolio] = useState(null);
+  const [similarCompanies, setSimilarCompanies] = useState([]);
+
+  console.log("Portfolio Name:", portfolioName);
+  console.log("Portfolio Data:", isLoading, portfolioData);
 
   const router = useRouter();
 
@@ -31,6 +38,27 @@ const PortfolioDetail = () => {
       )
     );
   }, []);
+
+  useEffect(() => {
+    if (!isLoading && portfolioData?.data?.response) {
+      const matchingPortfolio = portfolioData.data.response.find(portfolio => {
+        const urlFriendlyTitle = portfolio.startupTitle
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '');
+        return urlFriendlyTitle === portfolioName;
+      });
+
+      setMatchedPortfolio(matchingPortfolio);
+      console.log("Matched Portfolio:", matchingPortfolio);
+
+      // Get similar companies (excluding the matched portfolio)
+      const similar = portfolioData.data.response
+        .filter(portfolio => portfolio.startupTitle !== matchingPortfolio?.startupTitle)
+        .slice(0, 5); // Limit to 5 similar companies
+      setSimilarCompanies(similar);
+    }
+  }, [isLoading, portfolioData, portfolioName]);
 
   let aboutUsHeroSection = {
     title: "Earth Tatva",
@@ -413,9 +441,9 @@ const PortfolioDetail = () => {
         <h1 className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8 text-start grid-main-container px-4 lg:px-0">Explore Similar Companies</h1>
         <div className="overflow-x-auto pb-4 hide-scrollbar">
           <div className="flex space-x-4 lg:space-x-6 px-4 lg:pl-6 w-max">
-            {mockProducts.map((product) => (
-              <div key={product.id} className="w-[300px] sm:w-[300px] lg:w-[380px] h-[450px] flex-shrink-0">
-                <ProductCard product={product} view={"grid"} />
+            {similarCompanies?.map((company) => (
+              <div key={company?.startupTitle} className="w-[300px] sm:w-[300px] lg:w-[380px] h-[450px] flex-shrink-0">
+                <ProductCard product={company} view={"grid"} />
               </div>
             ))}
           </div>
