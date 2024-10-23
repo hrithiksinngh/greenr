@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { FaChevronDown, FaChevronRight, FaSearch, FaList, FaFilter, FaSort } from 'react-icons/fa'
+import { useState, useEffect, useRef } from 'react'
+import { FaChevronDown, FaChevronRight, FaSearch, FaList, FaFilter } from 'react-icons/fa'
 import { BsGrid } from 'react-icons/bs'
 import { MdOutlineSort, MdKeyboardArrowDown } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { BsGlobe } from "react-icons/bs";
-import { IoFilterSharp } from 'react-icons/io5';
 
 // At the top of your file, add this import:
 import { FaTimes } from 'react-icons/fa';
@@ -43,13 +42,13 @@ const truncateText = (text, maxLength) => {
 
 // Add this new component for the mobile search
 const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef }) => (
-  <div className="relative mb-4 md:hidden">
+  <div className="relative w-full">
     <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
     <input
       ref={searchInputRef}
       type="text" 
       placeholder='Search by "State/Company"'
-      className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
+      className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
       value={searchTerm}
       onChange={handleSearchChange}
     />
@@ -82,12 +81,6 @@ export default function ProductListing() {
   const sortDropdownRef = useRef(null);
 
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-
-  const [isMobileSortOpen, setIsMobileSortOpen] = useState(false);
-
-  const [showMobileButtons, setShowMobileButtons] = useState(false);
-  const productListingRef = useRef(null);
-  const mobileButtonsRef = useRef(null);
 
   const handleFilterChange = (category, value) => {
     setSelectedFilters(prev => ({
@@ -200,46 +193,8 @@ export default function ProductListing() {
     setSearchTerm(e.target.value);
   };
 
-  const handleMobileSortChange = useCallback((type) => {
-    setSortBy(type);
-    setIsMobileSortOpen(false);
-  }, []);
-
-  const handleScroll = useCallback(() => {
-    if (!productListingRef.current || !mobileButtonsRef.current) return;
-
-    const productListingRect = productListingRef.current.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-
-    if (productListingRect.bottom <= windowHeight) {
-      // Product listing is fully visible, stick buttons to its bottom
-      setShowMobileButtons(true);
-      mobileButtonsRef.current.style.position = 'absolute';
-      mobileButtonsRef.current.style.bottom = '0';
-    } else if (productListingRect.top >= windowHeight) {
-      // Product listing is not visible yet, hide buttons
-      setShowMobileButtons(false);
-    } else {
-      // Product listing is partially visible, stick buttons to viewport bottom
-      setShowMobileButtons(true);
-      mobileButtonsRef.current.style.position = 'fixed';
-      mobileButtonsRef.current.style.bottom = '0';
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
-    handleScroll(); // Initial check
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, [handleScroll]);
-
   return (
-    <div className="container mx-auto sm:px-4 pb-16 md:pb-0 relative"> {/* Added relative positioning */}
+    <div className="container mx-auto sm:px-4">
       {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-xs mb-3 md:mb-6">
         <Link href="/" className="text-[#000000] cursor-pointer">Home</Link>
@@ -251,11 +206,64 @@ export default function ProductListing() {
       {/* Description and Controls */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6">
         <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-0">Explore innovative green companies scaling to mitigate environmental degradation</p>
-        <div className="hidden md:flex flex-col md:flex-row w-full md:w-auto">
+        <div className="flex flex-col md:flex-row w-full md:w-auto">
+          {/* Mobile view: Search, Sort and Filter */}
+          <div className="flex items-center justify-between mb-2 md:mb-0 md:hidden w-full">
+            {/* Mobile Search */}
+            <div className="flex-grow mr-2">
+              <MobileSearch 
+                searchTerm={searchTerm}
+                handleSearchChange={handleSearchChange}
+                handleClearSearch={handleClearSearch}
+                searchInputRef={searchInputRef}
+              />
+            </div>
+
+            {/* Custom Sort Dropdown */}
+            {/* <div className="relative" ref={sortDropdownRef}>
+              <button
+                className="flex items-center justify-center bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
+                onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+              >
+                <MdOutlineSort className="text-[#000000]" size={20} />
+              </button>
+              {isSortDropdownOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
+                  <ul className="py-1">
+                    <li
+                      className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleSortChange('Type of Waste')}
+                    >
+                      Type of Waste
+                    </li>
+                    {filters.typeOfWaste.map(type => (
+                      <li
+                        key={type}
+                        className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSortChange(type)}
+                      >
+                        {type}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div> */}
+
+            {/* Mobile Filter Button */}
+            <button
+              className="flex items-center justify-center ml-2 px-3 py-2 text-xs bg-[#4d7297] text-white rounded"
+              onClick={() => setIsMobileFiltersOpen(true)}
+            >
+              <FaFilter size={14} className="mr-2" />
+              <span>Filters</span>
+            </button>
+          </div>
+
           {/* Desktop view: Sort Dropdown and View Switcher */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Custom Sort Dropdown for desktop */}
-            <div className="relative" ref={sortDropdownRef}>
+            {/* <div className="relative" ref={sortDropdownRef}>
               <button
                 className="flex items-center space-x-2 bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
                 onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
@@ -285,7 +293,7 @@ export default function ProductListing() {
                   </ul>
                 </div>
               )}
-            </div>
+            </div> */}
             {/* View Switcher - Only visible on desktop */}
             <button
               className="flex items-center space-x-2 p-2 text-xs"
@@ -307,18 +315,8 @@ export default function ProductListing() {
         </div>
       </div>
 
-      {/* Add MobileSearch component here with reduced top margin */}
-      <div className="md:hidden -mt-2 mb-4">
-        <MobileSearch 
-          searchTerm={searchTerm}
-          handleSearchChange={handleSearchChange}
-          handleClearSearch={handleClearSearch}
-          searchInputRef={searchInputRef}
-        />
-      </div>
-
       {/* Main Content */}
-      <div ref={productListingRef} className="flex flex-col md:flex-row gap-4 md:gap-8">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8">
         {/* Filter Section */}
         <div className={`w-full md:w-1/4 fixed md:static top-0 left-0 h-full md:h-auto z-50 md:z-0 bg-white md:bg-transparent transition-transform duration-300 ease-in-out transform ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
           <div className="bg-[#FFFFFF] h-full md:h-auto flex flex-col md:rounded-lg md:border md:border-gray-200 md:shadow-sm">
@@ -476,9 +474,8 @@ export default function ProductListing() {
           </div>
         </div>
 
-        {/* Product Listings and Pagination Container */}
-        <div className="flex-1 flex flex-col">
-          {/* Product Listings */}
+        {/* Product Listings */}
+        <div className="w-full md:w-3/4">
           <div
             className={`${view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2' : 'flex flex-col'} gap-4 md:gap-6`}
           >
@@ -538,7 +535,7 @@ export default function ProductListing() {
 
           {/* Pagination */}
           {filteredProducts.length > 0 ? (
-            <div className="w-full mt-6 md:mt-8">
+            <div className="mt-6 md:mt-8 mb-8 md:mb-0">
               <Pagination 
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -551,197 +548,6 @@ export default function ProductListing() {
           )}
         </div>
       </div>
-
-      {/* Mobile Sort and Filter buttons */}
-      <div 
-        ref={mobileButtonsRef}
-        className={`left-0 right-0 bg-white border-t border-gray-200 flex justify-between items-stretch md:hidden z-50 ${
-          showMobileButtons ? 'fixed bottom-0' : 'absolute'
-        }`}
-        style={{
-          width: '100vw', 
-          marginLeft: 'calc(-50vw + 50%)',
-          ...(showMobileButtons ? {} : { bottom: '-60px' })
-        }}
-      >
-        <button
-          className="flex-1 py-3 text-sm font-medium text-gray-700 bg-white border-r border-gray-300 focus:outline-none flex items-center justify-center"
-          onClick={() => setIsMobileSortOpen(true)}
-        >
-          <FaSort className="mr-2" />
-          Sort
-        </button>
-        <button
-          className="flex-1 py-3 text-sm font-medium text-gray-700 bg-white focus:outline-none flex items-center justify-center"
-          onClick={() => setIsMobileFiltersOpen(true)}
-        >
-          <IoFilterSharp className="mr-2" />
-          Filter
-        </button>
-      </div>
-
-      {/* Mobile Sort Overlay */}
-      {isMobileSortOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-lg">
-            <div className="p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold">Sort By</h2>
-              <button
-                className="absolute top-4 right-4 text-gray-500"
-                onClick={() => setIsMobileSortOpen(false)}
-              >
-                <FaTimes size={24} />
-              </button>
-            </div>
-            <div className="p-4">
-              <ul>
-                <li
-                  className={`py-2 px-4 pl-0 border-gray-200 text-xs ${sortBy === 'Type of Waste' ? 'bg-gray-100' : ''}`}
-                  onClick={() => handleMobileSortChange('Type of Waste')}
-                >
-                  Type of Waste
-                </li>
-                {filters.typeOfWaste.map(type => (
-                  <li
-                    key={type}
-                    className={`py-2 px-4 pl-0 border-gray-200 text-xs ${sortBy === type ? 'bg-gray-100' : ''}`}
-                    onClick={() => handleMobileSortChange(type)}
-                  >
-                    {type}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Filter Overlay */}
-      {isMobileFiltersOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-          <div className="absolute top-0 right-0 bottom-0 w-full max-w-xs bg-white h-full overflow-y-auto">
-            <div className="sticky top-0 bg-white z-10 p-4 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">Filters</h2>
-                <button
-                  className="text-gray-500"
-                  onClick={() => setIsMobileFiltersOpen(false)}
-                >
-                  <FaTimes size={24} />
-                </button>
-              </div>
-            </div>
-            <div className="p-4">
-              {/* Selected Filters */}
-              {Object.keys(selectedFilters).length > 0 && (
-                <>
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-semibold">Selected Filters</h3>
-                      <button 
-                        className="text-sm text-[#E41E25CC] cursor-pointer hover:text-[#E41E25] transition-colors duration-200" 
-                        onClick={clearFilters}
-                      >
-                        Clear All
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {Object.entries(selectedFilters).flatMap(([category, values]) =>
-                        values.map(value => (
-                          <span 
-                            key={`${category}-${value}`} 
-                            className="bg-[#fafafa] border border-[#0000001A] text-[#000000D9] text-xs font-normal px-2.5 py-1.5 rounded-3xl flex items-center"
-                          >
-                            {value}
-                            <button
-                              onClick={() => handleFilterChange(category, value)}
-                              className="ml-1 text-[#000000D9] hover:text-black"
-                            >
-                              <ThinXIcon />
-                            </button>
-                          </span>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                  <hr className="border-gray-200 mb-4" />
-                </>
-              )}
-
-              {/* Category filter */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center cursor-pointer" onClick={() => setIsCategoryOpen(!isCategoryOpen)}>
-                  <h3 className="">Category</h3>
-                  {isCategoryOpen ? <LightChevronDown /> : <LightChevronRight />}
-                </div>
-                {isCategoryOpen && (
-                  <div className="mt-2 space-y-2">
-                    {filters.category.map(category => (
-                      <label key={category} className="flex items-center text-xs">
-                        <input
-                          type="checkbox"
-                          className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                          checked={selectedFilters.category?.includes(category) || false}
-                          onChange={() => handleFilterChange('category', category)}
-                        />
-                        {category}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <hr className="border-gray-200 mb-4" />
-
-              {/* Type of Waste filter */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center cursor-pointer" onClick={() => setIsTypeOfWasteOpen(!isTypeOfWasteOpen)}>
-                  <h3 className="">Type of Waste</h3>
-                  {isTypeOfWasteOpen ? <LightChevronDown /> : <LightChevronRight />}
-                </div>
-                {isTypeOfWasteOpen && (
-                  <div className="mt-2 space-y-2">
-                    {filters.typeOfWaste.map(type => (
-                      <label key={type} className="flex items-center text-xs">
-                        <input
-                          type="checkbox"
-                          className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                          checked={selectedFilters.typeOfWaste?.includes(type) || false}
-                          onChange={() => handleFilterChange('typeOfWaste', type)}
-                        />
-                        {type}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <hr className="border-gray-200 mb-4" />
-
-              {/* Sectors filter */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center cursor-pointer" onClick={() => setIsSectorsOpen(!isSectorsOpen)}>
-                  <h3 className="">Sectors</h3>
-                  {isSectorsOpen ? <LightChevronDown /> : <LightChevronRight />}
-                </div>
-                {isSectorsOpen && (
-                  <div className="mt-2 space-y-2">
-                    {filters.sectors.map(sector => (
-                      <label key={sector} className="flex items-center text-xs">
-                        <input
-                          type="checkbox"
-                          className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                          checked={selectedFilters.sectors?.includes(sector) || false}
-                          onChange={() => handleFilterChange('sectors', sector)}
-                        />
-                        {sector}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
