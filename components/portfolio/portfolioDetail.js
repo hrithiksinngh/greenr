@@ -1,10 +1,5 @@
 import Desc from "../../components/desc/desc";
-import Icon from "../../components/icon/icon";
 import Title from "../../components/title/title";
-import Marquee from "../../components/marquee/marquee";
-import Button from "../../components/button/button";
-import headerStyle from "../../components/header/header.module.scss";
-import { getImageUrl } from "../../utils/images";
 import { useEffect, useState } from "react";
 import animation from "../../utils/animation";
 import Stats from "../../components/stats/stats";
@@ -16,6 +11,7 @@ import StackedImage from "../StackedImageCarousel";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { UseOurPortfolioData, UseFoundersCarouselData } from "../../utils/portfolioCarouselData";
+import MarqueeNew from "../marquee/marqueeNew";
 const PortfolioDetail = ({ portfolioName }) => {
 
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
@@ -32,6 +28,9 @@ const PortfolioDetail = ({ portfolioName }) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [keyMileStoneList, setKeyMileStoneList] = useState([])
+  const [cards, setCards] = useState([])
+  const [infoItems, setInfoItems] = useState([])
+  const [ourPartnerImgData, setOurPartnerImgData] = useState([])
 
   useEffect(() => {
     animation.afterCallback(
@@ -74,6 +73,33 @@ const PortfolioDetail = ({ portfolioName }) => {
       console.log("Milestone List:", milestoneList);
       setKeyMileStoneList(milestoneList)
       console.log("Matched Portfolio:", matchingPortfolio);
+      let offeringCardsData = [];
+      if(matchingPortfolio?.productOfferings){
+        offeringCardsData.push({
+          title: "Products Offered",
+          items: matchingPortfolio?.productOfferings?.split(',')
+        })
+      }
+      if(matchingPortfolio?.serviceOfferings){
+        offeringCardsData.push({
+          title: "Services Offered",
+          items: matchingPortfolio?.serviceOfferings?.split(',')
+        })
+      }
+      setCards(offeringCardsData)
+
+      const infoItemsData = [
+        { icon: BsGrid1X2Fill, title: "Commercial Capacity of Manufacturing Unit", value: matchingPortfolio?.commercialCapacityOfManufacturingUnit },
+        { icon: BsGeoAltFill, title: "Location", value: matchingPortfolio?.location },
+        { icon: BsFileEarmarkCheckFill, title: "IP / Certificate", value: matchingPortfolio?.intellectualPropertyOrCertificates },
+        { icon: BsClockFill, title: "Average Project Turnaround Time", value: matchingPortfolio?.averageProjectTurnaroundTime },
+        { icon: BsCashStack, title: "Pricing", value: matchingPortfolio?.productPricing },
+        { icon: BsCurrencyDollar, title: "Credit Period", value: matchingPortfolio?.creditPeriod }
+      ]
+      setInfoItems(infoItemsData)
+
+      let partnerImgData = matchingPortfolio?.cooperatesWorkedWith?.split(',');
+      setOurPartnerImgData(partnerImgData)
 
       // Get similar companies based on subsectors and sectors
       const similar = getSimilarCompanies(matchingPortfolio, portfolioData.data.response);
@@ -112,212 +138,6 @@ const PortfolioDetail = ({ portfolioName }) => {
 
     return [...combined, ...remaining].slice(0, 5);
   };
-
-  const cards = [
-    {
-      title: "Products Offered",
-      items: [
-        "Trainings on Extraction of Fibers",
-        "Making Value added Items",
-        "Treatment of Fibers",
-        "Yarn Spinning"
-      ]
-    },
-    {
-      title: "Services Offered",
-      items: [
-        "Handloom & Handcrafted Items made of natural banana & pineapple fibers",
-        "Banana pseudo stem sap water"
-      ]
-    }
-  ]
-
-  const infoItems = [
-    { icon: BsGrid1X2Fill, title: "Commercial Capacity of Manufacturing Unit", value: "5000 Pieces / month" },
-    { icon: BsGeoAltFill, title: "Location", value: "Ahmedabad, Gujarat" },
-    { icon: BsFileEarmarkCheckFill, title: "IP / Certificate", value: "Yes" },
-    { icon: BsClockFill, title: "Average Project Turnaround Time", value: "50 Days" },
-    { icon: BsCashStack, title: "Pricing", value: "At par with other eco-friendly alternatives" },
-    { icon: BsCurrencyDollar, title: "Credit Period", value: "0 Day" }
-  ]
-
-  const ourPartnerImgData = [
-    [
-        "2/2/2023 16:18:16",
-        "apriyadarshini@tns.org",
-        "Hasiru Dala Innovations",
-        "https://server2.getgreenr.org/images/marquee/3ip.png",
-        "3ip"
-    ],
-    [
-        "4/6/2023 9:49:34",
-        "menona@tns.org",
-        "Acumen",
-        "https://server2.getgreenr.org/images/download (1).jpeg",
-        "Ac_main"
-    ],
-    [
-        "4/6/2023 9:58:27",
-        "menona@tns.org",
-        "Theia Ventures",
-        "https://server2.getgreenr.org/images/Theia_logo@4x.png",
-        "Theia_Logo"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/ande.png",
-        "Ande"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/CatalystLogo.png",
-        "Catalyst"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/climate.png",
-        "Climate"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/ficci.png",
-        "Ficci"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/Greenartha.png",
-        "Greenartha"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/ian.png",
-        "Ian"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/indi.png",
-        "Indi"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/mahila.png",
-        "Mahila"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/Omnivore.png",
-        "Omnivore"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/psv.png",
-        "Psv"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/marquee/RMP_AIC.png",
-        "RMP AIC"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/partnerLogo/HDI.jpg",
-        "HDI"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/partnerLogo/ClimateAsialogo.png",
-        "Climate Asia"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/partnerLogo/jsslogotransparent.png",
-        "JSS"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/partnerLogo/image001.png",
-        "Parter"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/WebsiteLogo/riidl_logo.png",
-        "Riidl"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/SusMafia - Logo.png",
-        "Sus Mafia"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/Logo-01.png",
-        "Logo"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/Saahas.jpg",
-        "Saahas"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/vertex_final.png",
-        "Vertex Final"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/logo (2).png",
-        "IIC"
-    ],
-    [
-        "",
-        "",
-        "",
-        "https://server2.getgreenr.org/images/equilead24_logo.jpeg",
-        "Equilead"
-    ]
-]
 
   const handleViewAll = () => {
     router.push('/portfolio');
@@ -395,7 +215,7 @@ const PortfolioDetail = ({ portfolioName }) => {
       {/* Our Services */}
       <div className="grid-main-container mt-4">
         <div className="max-w-6xl mx-auto px-4 lg:px-0">
-          <div className={`grid ${cards.length > 1 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-4 md:gap-4`}>
+          {cards.length > 0 && <div className={`grid ${cards.length > 1 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-4 md:gap-4`}>
             {cards.map((card, index) => (
               <div key={index} className="bg-white p-6 lg:p-12 rounded-lg shadow-md">
                 <h2 className="text-xl lg:text-2xl font-bold text-[#6B9080] mb-4">{card.title}</h2>
@@ -409,7 +229,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                 </ul>
               </div>
             ))}
-          </div>
+          </div>}
 
           <div className="grid grid-cols-1 md:grid-cols-2 mt-12 lg:mt-20">
             {infoItems.map((item, index) => (
@@ -419,7 +239,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                 </div>
                 <div className="flex-grow mt-4 lg:mt-8">
                   <p className="text-sm lg:text-lg text-[#6B9080]">{item.title}</p>
-                  <p className="font-semibold text-gray-800 text-base lg:text-xl">{item.value}</p>
+                  <p className="font-semibold text-gray-800 text-base lg:text-xl">{item.value || "N.A."}</p>
                 </div>
                 {/* Right border for left column items (desktop only) */}
                 {index % 2 === 0 && index < 5 && (
@@ -454,7 +274,7 @@ const PortfolioDetail = ({ portfolioName }) => {
             />
           </div>
         </div>
-        <Marquee imgSrcList={ourPartnerImgData && ourPartnerImgData} />
+        <MarqueeNew imgSrcList={ourPartnerImgData} />
       </div>
       
       {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
