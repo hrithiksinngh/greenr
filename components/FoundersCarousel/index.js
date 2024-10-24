@@ -8,30 +8,6 @@ const Carousel = (props) => {
   const { handleConnect, slides } = props;
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
-  console.log("Slides:", slides);
-
-  // const slides = [
-  //   {
-  //     name: "Sarah Johnson",
-  //     text: "At our core, we believe in building lasting partnerships, not just facilitating transactions. Our goal is to be the financial ally you can rely on, supporting your aspirations and providing stability in uncertain times. We're committed to the prosperity of the communities we serve, viewing our work as a chance to make a meaningful impact.",
-  //     image: getImageUrl({ fileName: "homeBg", folderName: "home" }),
-  //   },
-  //   {
-  //     name: "Michael Chen",
-  //     text: "Innovation and integrity are the cornerstones of our approach. We're constantly pushing the boundaries of what's possible in finance, always with our clients' best interests at heart. Our mission is to democratize access to financial services, ensuring that everyone has the tools they need to secure their financial future.",
-  //     image: getImageUrl({ fileName: "homeBg", folderName: "home" }),
-  //   },
-  //   {
-  //     name: "Olivia Rodriguez",
-  //     text: "We understand that behind every account is a person with unique goals and challenges. That's why we've built our company on a foundation of empathy and personalized service. We're not just here to manage your money; we're here to help you achieve your dreams and navigate the complexities of modern finance.",
-  //     image: getImageUrl({ fileName: "homeBg", folderName: "home" }),
-  //   },
-  //   {
-  //     name: "David Okonkwo",
-  //     text: "Sustainability isn't just a buzzword for us—it's a guiding principle. We believe that responsible financial practices can drive positive change in the world. Our innovative products and services are designed to support both your financial growth and the health of our planet, proving that profit and purpose can go hand in hand.",
-  //     image: getImageUrl({ fileName: "homeBg", folderName: "home" }),
-  //   },
-  // ];
 
   useEffect(() => {
     if (isChanging) {
@@ -75,7 +51,7 @@ const Carousel = (props) => {
 
   return (
     <div className="relative">
-      <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-8 pt-8 md:pt-4 md:pt-32 md:p-32 md:pl-40 md:pb-20 flex flex-col md:flex-row justify-between items-center shadow-lg">
+      <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-8 pt-8 md:pt-32 md:p-32 md:pl-40 md:pb-20 flex flex-col md:flex-row justify-between items-center shadow-lg">
         {/* Image section */}
         <div className="relative w-full md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
           <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
