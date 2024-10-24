@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
+import { UsePostFormData } from '../../utils/formSubmit'
 
 export default function LetsConnectModal({ isOpen, setIsOpen }) {
+  
+  const { mutate } = UsePostFormData();
+
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -23,7 +27,14 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(formData)
-    setIsOpen(false)
+    mutate(formData, {
+      onSuccess: () => {
+        setIsOpen(false)
+      },
+      onError: (error) => {
+        console.error("Error submitting form:", error);
+      }
+    });
   }
 
   useEffect(() => {
