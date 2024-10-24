@@ -31,6 +31,7 @@ const PortfolioDetail = ({ portfolioName }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false)
+  const [keyMileStoneList, setKeyMileStoneList] = useState([])
 
   useEffect(() => {
     animation.afterCallback(
@@ -52,41 +53,65 @@ const PortfolioDetail = ({ portfolioName }) => {
       });
 
       setMatchedPortfolio(matchingPortfolio);
+      const milestoneList = [
+        {
+          title: matchingPortfolio?.milestoneOneValue,
+          desc: matchingPortfolio?.milestoneOneDescription,
+        },
+        {
+          title: matchingPortfolio?.milestoneTwoValue,
+          desc: matchingPortfolio?.milestoneTwoDescription,
+        },
+        {
+          title: matchingPortfolio?.milestoneThreeValue,
+          desc: matchingPortfolio?.milestoneThreeDescription,
+        },
+        {
+          title: matchingPortfolio?.milestoneFourValue,
+          desc: matchingPortfolio?.milestoneFourDescription,
+        },
+      ]
+      console.log("Milestone List:", milestoneList);
+      setKeyMileStoneList(milestoneList)
       console.log("Matched Portfolio:", matchingPortfolio);
 
-      // Get similar companies (excluding the matched portfolio)
-      const similar = portfolioData.data.response
-        .filter(portfolio => portfolio.startupTitle !== matchingPortfolio?.startupTitle)
-        .slice(0, 5); // Limit to 5 similar companies
+      // Get similar companies based on subsectors and sectors
+      const similar = getSimilarCompanies(matchingPortfolio, portfolioData.data.response);
       setSimilarCompanies(similar);
     }
   }, [isLoading, portfolioData, portfolioName]);
 
-  let aboutUsHeroSection = {
-    title: "Earth Tatva",
-    desc: `<p className="pb-4 text-slate-50 font-thin">EcoKaari is a social enterprise, born from an ardent desire of the team, to create a community where the bottom-up development is the key to achieve better living for all beings in a sustainable way. We upcycle waste plastic into beautiful handcrafted fabrics using Charkhas (spindle) and Handlooms. These fabrics are handcrafted by women and youth who belong to humble backgrounds.We aim to innovate and present sustainable alternatives by pairing traditional Indian crafts with our fabrics and contemporary designs. </p>`,
-    imgUrl: "https://s3-alpha-sig.figma.com/img/29a6/e11f/32e6c1dc1899c1c42db5a1a6c0eb8b06?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=h4TIdoWEDgnXfhTuY7m1nUJHErX1DHqSToOcqVVqDjubbyqFJluWjEz-x7yRehoK5pmmvHZ21t-qvgBEIsW4tohM5wdCtSU2ahHeKPT6sHxRctH4vl9T8xOQelQm9lmwQlxEEUFGugRzeT71ODzSf8wJd5K0L0umMNYNI~6WPnzGqX8EAtJdVNtAIOpK0-cN0zdUTlwP5srXOZQOWssV71bA9x2z3VLlSnQ~1ofVa5JwgHzH5fx8xsbOvSf4cIGF0ACRD~jbaeAGDjUSYlIFtHXf1Amy6E-D6SikP9y-iIWL8~kyO08MOsrQml741fnBi-oKoRS0SSl2~UXHT2BZIA__",
+  const getSimilarCompanies = (matchedPortfolio, allPortfolios) => {
+    if (!matchedPortfolio) return [];
+
+    const similarBySubsector = allPortfolios.filter(portfolio => 
+      portfolio.startupTitle !== matchedPortfolio.startupTitle &&
+      portfolio.subsector === matchedPortfolio.subsector
+    );
+
+    if (similarBySubsector.length >= 5) {
+      return similarBySubsector.slice(0, 5);
+    }
+
+    const similarBySector = allPortfolios.filter(portfolio => 
+      portfolio.startupTitle !== matchedPortfolio.startupTitle &&
+      portfolio.sector === matchedPortfolio.sector &&
+      !similarBySubsector.includes(portfolio)
+    );
+
+    const combined = [...similarBySubsector, ...similarBySector];
+
+    if (combined.length >= 5) {
+      return combined.slice(0, 5);
+    }
+
+    const remaining = allPortfolios.filter(portfolio => 
+      portfolio.startupTitle !== matchedPortfolio.startupTitle &&
+      !combined.includes(portfolio)
+    );
+
+    return [...combined, ...remaining].slice(0, 5);
   };
-
-
-  let keyMileStoneList = [
-    {
-      title: "3.2L",
-      desc: " (INR) Revenue in FY24",
-    },
-    {
-      title: "58L",
-      desc: " (INR) Funds Raised so far",
-    },
-    {
-      title: "22.4%",
-      desc: "Less Carbon Emissions",
-    },
-    {
-      title: "60%",
-      desc: "Less mining of Natural Resources",
-    },
-  ];
 
   const cards = [
     {
@@ -311,19 +336,19 @@ const PortfolioDetail = ({ portfolioName }) => {
                 <span className="text-white">{'>'}</span>
                 <Link href="/portfolio" className="text-white hover:text-[#e0e0e0] transition-colors duration-300">Portfolios</Link>
                 <span className="text-white">{'>'}</span>
-                <span className="text-[#ffffffb3]">Earth Tatva</span>
+                <span className="text-[#ffffffb3]">{matchedPortfolio?.startupTitle}</span>
               </div>
               <Title
-                externalClass={`text-3xl lg:f42 text-shadow text-white font-bold f-secondary hiddenAnimation`}
-                title={aboutUsHeroSection.title}
+                externalClass={`text-3xl md:text-4xl lg:f42 text-shadow text-white font-bold f-secondary hiddenAnimation`}
+                title={matchedPortfolio?.startupTitle}
               />
               <Desc
                 externalClass={`pt-4 lg:pt20 text-[#FFFFFFB2] text-sm lg:text-[0.9rem] pb-4 lg:pb20 hiddenAnimation`}
-                desc={aboutUsHeroSection.desc}
+                desc={matchedPortfolio?.businessDescription}
               />
               <Desc
                 externalClass={`text-white pb-8 lg:pb40 hiddenAnimation`}
-                desc={`Geographies Served : Pan India`}
+                desc={`Geographies Served : ${matchedPortfolio?.geographiesServed}`}
               />
               <button
                 className={`hidden lg:block bg-[#4d7297] mt-4 lg:mt20 font-semibold rounded text-sm lg:f18 rounded text-white px-6 lg:px-8 py-2 lg:py-3`}
@@ -334,7 +359,7 @@ const PortfolioDetail = ({ portfolioName }) => {
             </div>
             <div className={`col-span-1 lg:col-span-2 rightCol pl-2 flex justify-center`}>
               <div className="lg:m-auto lg:my-24">
-                <StackedImage img={aboutUsHeroSection.imgUrl} />
+                <StackedImage img={matchedPortfolio?.productImage} />
               </div>
             </div>
           </div>
