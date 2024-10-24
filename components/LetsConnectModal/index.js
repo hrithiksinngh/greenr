@@ -3,18 +3,21 @@
 import { useState, useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { UsePostFormData } from '../../utils/formSubmit'
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
 
 export default function LetsConnectModal({ isOpen, setIsOpen }) {
-  
-  const { mutate } = UsePostFormData();
+  const { mutate, isLoading, isSuccess, isError } = UsePostFormData();
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     fullName: '',
     companyName: '',
     emailId: '',
     phoneNumber: '',
     message: ''
-  })
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -25,13 +28,17 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(formData)
+    e.preventDefault();
+    setMessage('');
     mutate(formData, {
       onSuccess: () => {
-        setIsOpen(false)
+        setMessage('Form submitted successfully!');
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 2000);
       },
       onError: (error) => {
+        setMessage('Failed to submit form. Please try again.');
         console.error("Error submitting form:", error);
       }
     });
@@ -39,14 +46,13 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     if (isOpen) {
-      // Disable scrolling on the body when modal is open
       document.body.style.overflow = 'hidden'
     } else {
-      // Re-enable scrolling when modal is closed
       document.body.style.overflow = 'unset'
+      setFormData(initialFormData);
+      setMessage('');
     }
 
-    // Cleanup function to re-enable scrolling when component unmounts
     return () => {
       document.body.style.overflow = 'unset'
     }
@@ -74,82 +80,91 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
         </div>
 
         <div className="p-6 sm:p-12 sm:pt-6 sm:pb-8">
-          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
-            <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0">
-              <div className="relative flex-1">
-                <LabelWithAsterisk required>Full Name</LabelWithAsterisk>
-                <input
-                  type="text"
-                  name="fullName"
-                  required
-                  className={inputClasses}
-                  placeholder="Enter your full name"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="relative flex-1">
-                <LabelWithAsterisk required>Company Name</LabelWithAsterisk>
-                <input
-                  type="text"
-                  name="companyName"
-                  required
-                  className={inputClasses}
-                  placeholder="Enter your company name"
-                  value={formData.companyName}
-                  onChange={handleInputChange}
-                />
-              </div>
+          {isLoading && <div className="text-center">Loading...</div>}
+          {message && (
+            <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-green-500' : 'text-red-500'}`}>
+              {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
+              <p className="mt-2">{message}</p>
             </div>
+          )}
+          {!isLoading && !message && (
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+              <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0">
+                <div className="relative flex-1">
+                  <LabelWithAsterisk required>Full Name</LabelWithAsterisk>
+                  <input
+                    type="text"
+                    name="fullName"
+                    required
+                    className={inputClasses}
+                    placeholder="Enter your full name"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="relative flex-1">
+                  <LabelWithAsterisk required>Company Name</LabelWithAsterisk>
+                  <input
+                    type="text"
+                    name="companyName"
+                    required
+                    className={inputClasses}
+                    placeholder="Enter your company name"
+                    value={formData.companyName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
 
-            <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0">
-              <div className="relative flex-1">
-                <LabelWithAsterisk required>Email Id</LabelWithAsterisk>
-                <input
-                  type="email"
-                  name="emailId"
+              <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-6 sm:space-y-0">
+                <div className="relative flex-1">
+                  <LabelWithAsterisk required>Email Id</LabelWithAsterisk>
+                  <input
+                    type="email"
+                    name="emailId"
+                    required
+                    className={inputClasses}
+                    placeholder="Enter your email address"
+                    value={formData.emailId}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="relative flex-1">
+                  <LabelWithAsterisk>Phone Number</LabelWithAsterisk>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    className={inputClasses}
+                    placeholder="Enter your phone number (optional)"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <LabelWithAsterisk required>Message</LabelWithAsterisk>
+                <textarea
+                  name="message"
                   required
+                  rows={4}
                   className={inputClasses}
-                  placeholder="Enter your email address"
-                  value={formData.emailId}
+                  placeholder="Enter your message here"
+                  value={formData.message}
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="relative flex-1">
-                <LabelWithAsterisk>Phone Number</LabelWithAsterisk>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  className={inputClasses}
-                  placeholder="Enter your phone number (optional)"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                />
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-[#4d7297] text-white rounded py-2 px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  Submit
+                </button>
               </div>
-            </div>
-
-            <div className="relative">
-              <LabelWithAsterisk required>Message</LabelWithAsterisk>
-              <textarea
-                name="message"
-                required
-                rows={4}
-                className={inputClasses}
-                placeholder="Enter your message here"
-                value={formData.message}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <button
-                type="submit"
-                className="bg-[#4d7297] text-white rounded py-2 px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </div>
