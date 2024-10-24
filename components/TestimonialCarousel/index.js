@@ -33,6 +33,40 @@ const TestimonialCarousel = ({ testimonials }) => {
     }
   };
 
+  const renderMedia = (testimonial) => {
+    switch (testimonial.mediaType) {
+      case 'youtube':
+        return (
+          <iframe
+            className="w-full h-48 rounded-t-lg"
+            src={testimonial.mediaUrl}
+            title={testimonial.name}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        );
+      case 'image':
+        return (
+          <img
+            className="w-full h-48 rounded-t-lg object-cover"
+            src={testimonial.mediaUrl}
+            alt={testimonial.name}
+          />
+        );
+      case 'video':
+        return (
+          <video
+            className="w-full h-48 rounded-t-lg"
+            src={testimonial.mediaUrl}
+            controls
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   const renderTestimonial = (testimonial, index) => (
     <div 
       key={index} 
@@ -41,16 +75,7 @@ const TestimonialCarousel = ({ testimonials }) => {
         ${index !== currentIndex ? 'hidden' : ''}
         transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
     >
-      {testimonial.mediaType === "youtube" && (
-        <iframe
-          className="w-full h-48 rounded-t-lg"
-          src={testimonial.mediaUrl}
-          title={testimonial.name}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      )}
+      {renderMedia(testimonial)}
       <div className="p-6 flex flex-col flex-grow">
         <p className="text-gray-700 mb-4 text-[14px] flex-grow">{testimonial.description}</p>
         <div className="flex items-center mt-auto">
@@ -99,7 +124,7 @@ const TestimonialCarousel = ({ testimonials }) => {
         ref={carouselRef}
         className="px-4 sm:flex sm:space-x-4 sm:px-10 sm:pb-4 sm:overflow-x-auto hide-scrollbar"
       >
-        {testimonials.map((testimonial, index) => renderTestimonial(testimonial, index))}
+        {testimonials?.map((testimonial, index) => renderTestimonial(testimonial, index))}
       </div>
       <div className="flex justify-center mt-4 space-x-4">
         <ArrowButton direction="left" onClick={prevTestimonial} />
