@@ -22,7 +22,7 @@ import { Carousel } from "flowbite-react";
 import { AiOutlineRightCircle, AiOutlineLeftCircle } from "react-icons/ai";
 import Stats from "../../components/stats/stats";
 import TestimonialCarousel from "../TestimonialCarousel";
-import { UseSectorsIncludedData } from "../../utils/portfolioCarouselData";
+import { UseEntrepreneurWinsTestimonials, UseSectorsIncludedData } from "../../utils/portfolioCarouselData";
 import DisclosureSectorsInclude from "../customDisc/sectorsInclude";
 
 const IndexPage = () => {
@@ -42,6 +42,10 @@ const IndexPage = () => {
   let { data: sectorsIncluded } = UseSectorsIncludedData();
   const sectorsIncludedData = sectorsIncluded && sectorsIncluded.data.response;
   console.log("Sectors Included Data:", sectorsIncludedData);
+
+  let { data: entrepreneurWinsTestimonials } = UseEntrepreneurWinsTestimonials();
+  const entrepreneurWinsTestimonialsData = entrepreneurWinsTestimonials && entrepreneurWinsTestimonials.data.response;
+  console.log("Entrepreneur Wins Testimonials Data:", entrepreneurWinsTestimonialsData);
 
   useEffect(() => {
     animation.afterCallback(
@@ -429,7 +433,7 @@ consumption.</strong></p>`,
 
       <div className="w-full py-10 mb-10 mt-16">
         <h1 className="grid-main-container text-3xl font-bold mb-10 px-4">Entrepreneur Wins Testimonials</h1>
-        <TestimonialCarousel />
+        <TestimonialCarousel testimonials={entrepreneurWinsTestimonialsData} />
       </div>
     </>
   );

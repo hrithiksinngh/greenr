@@ -1,45 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-const testimonials = [
-  {
-    id: 1,
-    name: "John Doe",
-    title: "CEO of Company",
-    type: "youtube", // Can be 'image', 'video', or 'youtube'
-    src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
-    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
-  },
-  {
-    id: 2,
-    name: "Natasha D'Costa",
-    title: "Founder of Startup",
-    type: "youtube", // Can be 'image', 'video', or 'youtube'
-    src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
-    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
-  },
-  {
-    id: 3,
-    name: "Jane Doe",
-    title: "Entrepreneur",
-    type: "youtube", // Can be 'image', 'video', or 'youtube'
-    src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
-    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
-  },
-  {
-    id: 4,
-    name: "Jane Doe",
-    title: "Entrepreneur",
-    type: "youtube", // Can be 'image', 'video', or 'youtube'
-    src: "https://youtube.com/embed/OZEnys-tDDY",
-    text: "Sypto does what it says, it either books profit or prevents your capital from making loss according to market conditions. The team is a message away when you got any query. I am very happy that I got introduced to Sypto.",
-    avatar: "https://server2.getgreenr.org/images/AjayM_F.png", // Add this line for each testimonial
-  },
-];
-
-const TestimonialCarousel = () => {
+const TestimonialCarousel = ({ testimonials }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const carouselRef = useRef(null);
@@ -74,16 +35,16 @@ const TestimonialCarousel = () => {
 
   const renderTestimonial = (testimonial, index) => (
     <div 
-      key={testimonial.id} 
+      key={index} 
       className={`bg-white shadow-md rounded-lg w-full sm:w-80 flex-shrink-0 flex flex-col 
         sm:block
         ${index !== currentIndex ? 'hidden' : ''}
         transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
     >
-      {testimonial.type === "youtube" && (
+      {testimonial.mediaType === "youtube" && (
         <iframe
           className="w-full h-48 rounded-t-lg"
-          src={testimonial.src}
+          src={testimonial.mediaUrl}
           title={testimonial.name}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -91,7 +52,7 @@ const TestimonialCarousel = () => {
         />
       )}
       <div className="p-6 flex flex-col flex-grow">
-        <p className="text-gray-700 mb-4 text-[14px] flex-grow">{testimonial.text}</p>
+        <p className="text-gray-700 mb-4 text-[14px] flex-grow">{testimonial.description}</p>
         <div className="flex items-center mt-auto">
           <img 
             src={testimonial.avatar} 

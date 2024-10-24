@@ -17,6 +17,10 @@ const fetchSectorsIncludedData = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/sectors-include`);
 };
 
+const fetchEntrepreneurWinsTestimonials = () => {
+  return axios.get(`https://server2.getgreenr.org/api/portfolio/entrepreneur-wins-testimonials`);
+};
+
 const fetchCohortOneData = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/cohort-one`);
 };
@@ -125,6 +129,20 @@ export const UseSectorsIncludedData = () => {
   return useQuery(["sectorsIncluded"], fetchSectorsIncludedData, {
     initialData: () => {
       const data = queryClient.getQueryData("sectorsIncluded");
+      if (data) {
+        return { data: data };
+      } else {
+        return undefined;
+      }
+    }
+  });
+};
+
+export const UseEntrepreneurWinsTestimonials = () => {
+  const queryClient = useQueryClient();
+  return useQuery(["entrepreneurWinsTestimonials"], fetchEntrepreneurWinsTestimonials, {
+    initialData: () => {
+      const data = queryClient.getQueryData("entrepreneurWinsTestimonials");
       if (data) {
         return { data: data };
       } else {
