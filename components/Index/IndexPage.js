@@ -22,6 +22,8 @@ import { Carousel } from "flowbite-react";
 import { AiOutlineRightCircle, AiOutlineLeftCircle } from "react-icons/ai";
 import Stats from "../../components/stats/stats";
 import TestimonialCarousel from "../TestimonialCarousel";
+import { UseSectorsIncludedData } from "../../utils/portfolioCarouselData";
+import DisclosureSectorsInclude from "../customDisc/sectorsInclude";
 
 const IndexPage = () => {
   let { data: ourPartner } = UseOurPartnerData();
@@ -36,6 +38,10 @@ const IndexPage = () => {
   let { data: googleFormLink } = UseGoogleFormLinkData();
   const googleForm = googleFormLink && googleFormLink.data.data;
   const buttonHrefLink = googleForm && googleForm[0][0];
+
+  let { data: sectorsIncluded } = UseSectorsIncludedData();
+  const sectorsIncludedData = sectorsIncluded && sectorsIncluded.data.response;
+  console.log("Sectors Included Data:", sectorsIncludedData);
 
   useEffect(() => {
     animation.afterCallback(
@@ -395,102 +401,32 @@ consumption.</strong></p>`,
             />
           </div>
         </div>
-        {/* <div className="grid-container"> */}
-        {/* <div className="grid pt40 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
-          {sectorImageData &&
-            sectorImageData.map((sectorsData, i) => (
-              <ImgOverlay
-                key={`IO-sectors-include-${i}`}
-                overlayText={sectorsData[1]}
-                imgSrc={sectorsData[0]}
-              />
-            ))}
-        </div> */}
         <div className="grid-main-container pt60 ">
-          <div className="grid-container block md:flex">
-              <div className=" w-[100%] md:w-[50%] md:mr-4 hiddenAnimation">
-                {helpDataList1.map((helpData, i) => (
-                  <DisclosureX
-                    key={`DX-how-we-help-${i}`}
-                    disSvg={helpData.svgId}
-                    disTitle={helpData.title}
-                    disDesc={helpData.desc}
-                    isIcon={true}
-                  />
-                ))}
+          <div className="grid-container grid grid-cols-1 md:grid-cols-2 gap-4">
+            {sectorsIncludedData?.map((data, i) => (
+              <div key={`DX-sectors-include-${i}`} className="hiddenAnimation">
+                <DisclosureSectorsInclude
+                  iconUrl={data.icon}
+                  disTitle={data.title}
+                  disDesc={data.description}
+                  isIcon={true}
+                />
               </div>
-              <div className=" w-[100%] md:w-[50%] hiddenAnimation">
-                {helpDataList2.map((helpData, i) => (
-                  <DisclosureX
-                    key={`DX-how-we-help-${i}`}
-                    disSvg={helpData.svgId}
-                    disTitle={helpData.title}
-                    disDesc={helpData.desc}
-                    isIcon={true}
-                  />
-                ))}
-              </div>
-            </div>
+            ))}
+          </div>
         </div>
         <div className="grid-container flex justify-end items-end text-info font-normal pr-6 f22 pt20">
           …and many more new frontiers.
         </div>
-        <div className="grid-container grid-container flex justify-center pt30 ">
+        <div className="grid-container flex justify-center pt30 ">
           <Button
             externalClass={`infoBtn mt30 text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded  large`}
-            buttonText={`OMG! It’s me`}
+            buttonText={`OMG! It's me`}
             buttonHrefLink={buttonHrefLink ? buttonHrefLink : ""}
           />
         </div>
-        {/* </div> */}
       </div>
 
-        {/* ENTPR WINS SECTION */}
-      {/* <div>
-        <div className="grid-main-container pt60 pb60">
-          <div className="grid-container">
-            <Title
-              title={"Entrepreneur wins"}
-              externalClass={`pb10 hiddenAnimation`}
-            />
-          </div>
-
-          <div className="h-[450px] w-full md:flex hidden">
-            <Carousel
-              slideInterval={2000}
-              indicators={false}
-              leftControl={
-                <AiOutlineLeftCircle size={50} className="text-[#6b9080]" />
-              }
-              rightControl={
-                <AiOutlineRightCircle size={50} className="text-[#6b9080]" />
-              }
-              className="px-20"
-            >
-              {result}
-            </Carousel>
-          </div>
-          <div className="h-[520px] w-full md:hidden">
-            <Carousel slideInterval={2000} indicators={false}>
-              {ourWinsData &&
-                ourWinsData.map((ele, i) => {
-                  return (
-                    <div className="flex p-1 space-x-6 justify-center ">
-                      <PopUpCardOne
-                        index={i}
-                        popUpCardTitle={ele[0]}
-                        popUpCardDesc={ele[1]}
-                        popUpCardImg={ele[2]}
-                        isPopUp={false}
-                        isBio={false}
-                      />
-                    </div>
-                  );
-                })}
-            </Carousel>
-          </div>
-        </div>
-      </div> */}
       <div className="w-full py-10 mb-10 mt-16">
         <h1 className="grid-main-container text-3xl font-bold mb-10 px-4">Entrepreneur Wins Testimonials</h1>
         <TestimonialCarousel />

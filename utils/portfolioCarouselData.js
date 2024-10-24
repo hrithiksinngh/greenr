@@ -13,6 +13,10 @@ const fetchFoundersCarouselData = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/founders-carousel`);
 };
 
+const fetchSectorsIncludedData = () => {
+  return axios.get(`https://server2.getgreenr.org/api/portfolio/sectors-include`);
+};
+
 const fetchCohortOneData = () => {
   return axios.get(`https://server2.getgreenr.org/api/portfolio/cohort-one`);
 };
@@ -107,6 +111,20 @@ export const UseFoundersCarouselData = () => {
   return useQuery(["foundersCarousel"], fetchFoundersCarouselData, {
     initialData: () => {
       const data = queryClient.getQueryData("foundersCarousel");
+      if (data) {
+        return { data: data };
+      } else {
+        return undefined;
+      }
+    }
+  });
+};
+
+export const UseSectorsIncludedData = () => {
+  const queryClient = useQueryClient();
+  return useQuery(["sectorsIncluded"], fetchSectorsIncludedData, {
+    initialData: () => {
+      const data = queryClient.getQueryData("sectorsIncluded");
       if (data) {
         return { data: data };
       } else {
