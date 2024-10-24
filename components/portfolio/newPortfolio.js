@@ -590,13 +590,15 @@ export default function ProductListing() {
                       </p>
                     </div>
                     <div className="mt-auto">
-                      <button
-                        className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
-                        onClick={() => window.location.href = `/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`}
-                      >
-                        View Factsheet
-                        <FaChevronRight className="ml-1 sm:ml-2" size={10} />
-                      </button>
+                      {product.isFactsheetAvailable !== 'No' && (
+                        <button
+                          className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
+                          onClick={() => window.location.href = `/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`}
+                        >
+                          View Factsheet
+                          <FaChevronRight className="ml-1 sm:ml-2" size={10} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
