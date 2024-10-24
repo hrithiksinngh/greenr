@@ -47,6 +47,10 @@ const PortfolioDetail = ({ portfolioName }) => {
         return urlFriendlyTitle === portfolioName;
       });
 
+      if (!matchingPortfolio) {
+        router.push('/portfolio');
+      }
+
       setMatchedPortfolio(matchingPortfolio);
       const milestoneList = [
         {
