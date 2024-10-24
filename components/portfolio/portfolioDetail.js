@@ -204,6 +204,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                   key={i}
                   statsTitle={statsData.title}
                   statsDesc={statsData.desc}
+                  hiddenAnimation={false}
                 />
               ))}
               <Stats />

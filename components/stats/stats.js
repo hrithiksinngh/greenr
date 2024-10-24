@@ -4,7 +4,7 @@ import Title from '../title/title';
 import Desc from '../desc/desc';
 
 const Stats = props => {
-  let { statsSvgId, statsTitle, statsDesc } = props;
+  let { statsSvgId, statsTitle, statsDesc, hiddenAnimation = true } = props;
 
   return (
     <div className={`flexColCenter`}>
@@ -14,7 +14,7 @@ const Stats = props => {
       </div>
       <Desc
         desc={statsDesc}
-        externalClass={`font-normal text-slate-500 text-center hiddenAnimation`}
+        externalClass={`font-normal text-slate-500 text-center ${hiddenAnimation ? 'hiddenAnimation' : ''}`}
       />
     </div>
   );
