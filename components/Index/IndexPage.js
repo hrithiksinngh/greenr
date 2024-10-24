@@ -405,29 +405,35 @@ consumption.</strong></p>`,
             />
           </div>
         </div>
-        <div className="grid-main-container pt60 ">
-          <div className="grid-container grid grid-cols-1 md:grid-cols-2 gap-4">
-            {sectorsIncludedData?.map((data, i) => (
-              <div key={`DX-sectors-include-${i}`} className="hiddenAnimation">
-                <DisclosureSectorsInclude
-                  iconUrl={data.icon}
-                  disTitle={data.title}
-                  disDesc={data.description}
-                  isIcon={true}
-                />
+        <div className="grid-main-container pt60 pb60">
+          <div className="grid-container">
+            {sectorsIncludedData && sectorsIncludedData.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sectorsIncludedData.map((data, i) => (
+                  <div key={`DX-sectors-include-${i}`}> {/* Removed hiddenAnimation class */}
+                    <DisclosureSectorsInclude
+                      iconUrl={data.icon}
+                      disTitle={data.title}
+                      disDesc={data.description}
+                      isIcon={true}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p>No sectors data available</p>
+            )}
+            <div className="flex justify-end items-end text-info font-normal pr-6 f22 pt20">
+              …and many more new frontiers.
+            </div>
+            <div className="flex justify-center pt30">
+              <Button
+                externalClass={`infoBtn mt30 text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded large`}
+                buttonText={`OMG! It's me`}
+                buttonHrefLink={buttonHrefLink ? buttonHrefLink : ""}
+              />
+            </div>
           </div>
-        </div>
-        <div className="grid-container flex justify-end items-end text-info font-normal pr-6 f22 pt20">
-          …and many more new frontiers.
-        </div>
-        <div className="grid-container flex justify-center pt30 ">
-          <Button
-            externalClass={`infoBtn mt30 text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded  large`}
-            buttonText={`OMG! It's me`}
-            buttonHrefLink={buttonHrefLink ? buttonHrefLink : ""}
-          />
         </div>
       </div>
 
