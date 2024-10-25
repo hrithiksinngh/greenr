@@ -51,7 +51,7 @@ const Carousel = (props) => {
 
   return (
     <div className="relative">
-      <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-8 pt-8 md:pt-32 md:p-32 md:pl-40 md:pb-20 flex flex-col md:flex-row justify-between items-center shadow-lg">
+      <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-16 pt-8 md:pt-32 md:p-32 md:pl-40 md:pb-28 flex flex-col md:flex-row justify-between items-center shadow-lg">
         {/* Image section */}
         <div className="relative w-full md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
           <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
@@ -96,6 +96,20 @@ const Carousel = (props) => {
         >
           &#10095;
         </button>
+
+        {/* Navigation dots */}
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => changeSlide(index)}
+              className={`w-4 md:w-6 h-0.5 mx-1 transition-all duration-300 ${
+                currentSlide === index ? 'bg-white' : 'bg-white/40'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Navigation buttons - mobile view (outside and below the container) */}
