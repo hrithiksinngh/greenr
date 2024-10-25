@@ -77,7 +77,7 @@ const Carousel = (props) => {
             {slides[currentSlide]?.description}
           </p>
           <div className="flex items-center justify-between">
-            <button className="bg-[#6B9080] text-white font-semibold py-2 px-6 rounded-lg transition duration-300" onClick={handleConnect}>
+            <button className="bg-white text-[#6B9080] font-semibold py-2 px-6 rounded-lg transition duration-300" onClick={handleConnect}>
               Let's Connect
             </button>
           </div>

@@ -5,6 +5,7 @@ import { IoClose } from 'react-icons/io5'
 import { UsePostFormData } from '../../utils/formSubmit'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
 import { ThreeDots } from 'react-loader-spinner'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function LetsConnectModal({ isOpen, setIsOpen }) {
   const { mutate, isLoading, isSuccess, isError } = UsePostFormData();
@@ -45,7 +46,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     setMessage('');
     mutate(formData, {
       onSuccess: () => {
-        setMessage('Form submitted successfully!');
+        setMessage('Thank You! We will get back to you shortly');
         // setTimeout(() => {
         //   setIsOpen(false);
         // }, 2000);
@@ -82,8 +83,40 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     </label>
   )
 
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { type: "spring", damping: 25, stiffness: 500 }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.8,
+      transition: { type: "spring", damping: 25, stiffness: 500 }
+    }
+  };
+
+  const sliderVariants = {
+    hidden: { y: "100%" },
+    visible: { 
+      y: 0,
+      transition: { type: "spring", damping: 30, stiffness: 300 }
+    },
+    exit: { 
+      y: "100%",
+      transition: { type: "spring", damping: 30, stiffness: 300 }
+    }
+  };
+
   const modalContent = (
-    <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl relative my-8">
+    <motion.div 
+      className="bg-white rounded-lg shadow-xl w-full max-w-2xl relative my-8"
+      variants={modalVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
       <div className="flex justify-between items-center p-4 sm:p-6 relative">
         <button onClick={() => setIsOpen(false)} className="absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600">
           <IoClose size={24} className="sm:w-9 sm:h-9" />
@@ -182,11 +215,17 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </form>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 
   const sliderContent = (
-    <div className="fixed inset-x-0 bottom-0 bg-white rounded-t-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
+    <motion.div
+      className="fixed inset-x-0 bottom-0 bg-white rounded-t-lg shadow-xl w-full max-h-[90vh] overflow-y-auto"
+      variants={sliderVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
       <div className="flex justify-between items-center p-4 relative border-b">
         <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600">
           <IoClose size={24} />
@@ -285,12 +324,21 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </form>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-${isMobile ? 'end' : 'center'} justify-center p-4 z-50 ${isMobile ? '' : 'overflow-y-auto'}`}>
-      {isMobile ? sliderContent : modalContent}
-    </div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          className={`fixed inset-0 bg-black bg-opacity-50 flex items-${isMobile ? 'end' : 'center'} justify-center p-4 z-50 ${isMobile ? '' : 'overflow-y-auto'}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {isMobile ? sliderContent : modalContent}
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
