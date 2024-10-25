@@ -284,7 +284,7 @@ const PortfolioDetail = ({ portfolioName }) => {
             <div className="grid-main-container pt-12 lg:pt60">
               <div className="grid-container">
                 <Title
-                  title={"Co-operates worked with"}
+                  title={"Corporate Customers"}
                   externalClass={`text-xl lg:text-2xl pb-6 lg:pb10`}
                 />
               </div>
