@@ -28,7 +28,7 @@ const MarqueeNew = (props) => {
   }, [imgSrcList]);
 
   return (
-    <div className="mainMarquee" ref={marqueeRef}>
+    <div className={`${shouldRotate ? "" : "grid-main-container"} mainMarquee`} ref={marqueeRef}>
       <div className="wrapper">
         {shouldRotate ? (
           <>
@@ -60,10 +60,10 @@ const MarqueeNew = (props) => {
             </div>
           </>
         ) : (
-          <div className="flex items-center ">
+          <div className="flex items-center">
             {imgSrcList &&
               imgSrcList.map((imgSrc, i) => (
-                <div key={i} className="w-[120px] m-6 ">
+                <div key={i} className={`w-[120px] m-6 ${shouldRotate ? "" : "md:ml-0"}`}>
                   <img
                     key={`marquee-static-${i + 1}`}
                     className="w-[100%] my-auto"
