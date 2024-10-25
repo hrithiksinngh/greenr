@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import animation from "../../utils/animation";
 import Stats from "../../components/stats/stats";
 import { BsGrid1X2Fill, BsGeoAltFill, BsFileEarmarkCheckFill, BsClockFill, BsCashStack, BsCurrencyDollar } from 'react-icons/bs'
+import { MdOutlineCurrencyRupee } from "react-icons/md";
 import Carousel from "../FoundersCarousel";
 import LetsConnectModal from "../LetsConnectModal";
 import ProductCard from "../ProductCard/ProductCard";
@@ -13,6 +14,9 @@ import Link from 'next/link';
 import { UseOurPortfolioData, UseFoundersCarouselData } from "../../utils/portfolioCarouselData";
 import MarqueeNew from "../marquee/marqueeNew";
 import { ThreeDots } from "react-loader-spinner";
+import Image from 'next/image';
+import ClockDollarIcon from '../../assets/svgs/clock-dollar.svg';
+
 const PortfolioDetail = ({ portfolioName }) => {
 
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
@@ -89,8 +93,8 @@ const PortfolioDetail = ({ portfolioName }) => {
         { icon: BsGeoAltFill, title: "Location", value: matchingPortfolio?.location },
         { icon: BsFileEarmarkCheckFill, title: "IP / Certificate", value: matchingPortfolio?.intellectualPropertyOrCertificates },
         { icon: BsClockFill, title: "Average Project Turnaround Time", value: matchingPortfolio?.averageProjectTurnaroundTime },
-        { icon: BsCashStack, title: "Pricing", value: matchingPortfolio?.productPricing },
-        { icon: BsCurrencyDollar, title: "Credit Period", value: matchingPortfolio?.creditPeriod }
+        { icon: MdOutlineCurrencyRupee, title: "Pricing", value: matchingPortfolio?.productPricing },
+        { icon: 'clock-dollar', title: "Credit Period", value: matchingPortfolio?.creditPeriod }
       ]
       setInfoItems(infoItemsData)
 
@@ -250,7 +254,11 @@ const PortfolioDetail = ({ portfolioName }) => {
                 {infoItems.map((item, index) => (
                   <div key={index} className={`flex items-center space-x-4 relative p-4 lg:p-6 pb-3 pl-0 ${index % 2 !== 0 ? 'md:pl-10' : ''}`}>
                     <div className={`bg-[#6B9080] p-2 lg:p-3 rounded-full`}>
-                      <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+                      {item.icon === 'clock-dollar' ? (
+                        <Image src={ClockDollarIcon} alt="Clock Dollar Icon" width={24} height={24} className="text-white" />
+                      ) : (
+                        <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+                      )}
                     </div>
                     <div className="flex-grow mt-4 lg:mt-8">
                       <p className="text-sm lg:text-lg text-[#6B9080]">{item.title}</p>
@@ -281,7 +289,7 @@ const PortfolioDetail = ({ portfolioName }) => {
 
           {/* PARTNERS SECTION */}
           {ourPartnerImgData && ourPartnerImgData?.length > 0 && <div className="pb-12 lg:pb60">
-            <div className="grid-main-container pt-12 lg:pt60">
+            <div className="grid-main-container pt-8 lg:pt60">
               <div className="grid-container">
                 <Title
                   title={"Corporate Customers"}
