@@ -21,6 +21,8 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
   const [formData, setFormData] = useState(initialFormData);
   const [message, setMessage] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submissionFailed, setSubmissionFailed] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -44,15 +46,16 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setMessage('');
+    setFormSubmitted(false);
+    setSubmissionFailed(false);
     mutate(formData, {
       onSuccess: () => {
-        setMessage('Thank You! We will get back to you shortly');
-        // setTimeout(() => {
-        //   setIsOpen(false);
-        // }, 2000);
+        setMessage('We will get back to you shortly');
+        setFormSubmitted(true);
       },
       onError: (error) => {
         setMessage('Failed to submit form. Please try again.');
+        setSubmissionFailed(true);
         console.error("Error submitting form:", error);
       }
     });
@@ -109,6 +112,18 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     }
   };
 
+  const getHeadingClass = () => {
+    if (formSubmitted) return 'text-[#6b9080]';
+    if (submissionFailed) return 'text-[#DF2420]'; // Changed to #DF2420
+    return 'text-[#000000]';
+  }
+
+  const getHeadingText = () => {
+    if (formSubmitted) return 'Thank You!';
+    if (submissionFailed) return 'Oops!';
+    return 'Let\'s Connect';
+  }
+
   const modalContent = (
     <motion.div 
       className="bg-white rounded-lg shadow-xl w-full max-w-2xl relative my-8"
@@ -121,7 +136,9 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
         <button onClick={() => setIsOpen(false)} className="absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600">
           <IoClose size={24} className="sm:w-9 sm:h-9" />
         </button>
-        <h2 className="text-xl sm:text-2xl text-[#000000] font-semibold w-full text-center">Let's Connect</h2>
+        <h2 className={`text-xl sm:text-2xl font-semibold w-full text-center ${getHeadingClass()}`}>
+          {getHeadingText()}
+        </h2>
       </div>
 
       <div className="p-6 sm:p-12 sm:pt-6 sm:pb-8">
@@ -131,7 +148,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </div>
         )}
         {message && (
-          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-green-500' : 'text-red-500'}`}>
+          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-[#6b9080]' : 'text-[#DF2420]'}`}>
             {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
             <p className="mt-2">{message}</p>
           </div>
@@ -230,7 +247,9 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
         <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600">
           <IoClose size={24} />
         </button>
-        <h2 className="text-xl text-[#000000] font-semibold w-full text-center">Let's Connect</h2>
+        <h2 className={`text-xl font-semibold w-full text-center ${getHeadingClass()}`}>
+          {getHeadingText()}
+        </h2>
       </div>
 
       <div className="p-6 pb-8">
@@ -240,7 +259,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </div>
         )}
         {message && (
-          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-green-500' : 'text-red-500'}`}>
+          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-[#6b9080]' : 'text-[#DF2420]'}`}>
             {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
             <p className="mt-2">{message}</p>
           </div>
