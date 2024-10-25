@@ -1,15 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const TestimonialCarousel = ({ testimonials }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isAtStart, setIsAtStart] = useState(true);
+  const [isAtEnd, setIsAtEnd] = useState(false);
   const carouselRef = useRef(null);
+
+  useEffect(() => {
+    updateArrowStates();
+  }, [currentIndex]);
+
+  const updateArrowStates = () => {
+    setIsAtStart(currentIndex === 0);
+    setIsAtEnd(currentIndex === testimonials.length - 1);
+  };
 
   const nextTestimonial = () => {
     const container = carouselRef.current;
     if (window.innerWidth >= 640) { // Desktop view
       const cardWidth = container.children[0].offsetWidth;
-      container.scrollBy({ left: cardWidth + 16, behavior: 'smooth' }); // 16px for gap
+      container.scrollBy({ left: cardWidth + 16, behavior: 'smooth' });
+      // Update currentIndex for desktop view
+      setCurrentIndex(prevIndex => Math.min(prevIndex + 1, testimonials.length - 1));
     } else { // Mobile view
       setIsAnimating(true);
       setTimeout(() => {
@@ -23,7 +36,9 @@ const TestimonialCarousel = ({ testimonials }) => {
     const container = carouselRef.current;
     if (window.innerWidth >= 640) { // Desktop view
       const cardWidth = container.children[0].offsetWidth;
-      container.scrollBy({ left: -cardWidth - 16, behavior: 'smooth' }); // 16px for gap
+      container.scrollBy({ left: -cardWidth - 16, behavior: 'smooth' });
+      // Update currentIndex for desktop view
+      setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
     } else { // Mobile view
       setIsAnimating(true);
       setTimeout(() => {
@@ -93,13 +108,14 @@ const TestimonialCarousel = ({ testimonials }) => {
     </div>
   );
 
-  const ArrowButton = ({ direction, onClick }) => (
+  const ArrowButton = ({ direction, onClick, disabled }) => (
     <button
       onClick={onClick}
-      className="text-[#4C7297] font-bold p-2 border border-[#4C7297] rounded-full
+      className={`text-[#4C7297] font-bold p-2 border border-[#4C7297] rounded-full
         hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4C7297]
-        sm:hover:bg-transparent sm:focus:ring-0"
-      disabled={isAnimating}
+        sm:hover:bg-transparent sm:focus:ring-0
+        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isAnimating || disabled}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -127,8 +143,8 @@ const TestimonialCarousel = ({ testimonials }) => {
         {testimonials?.map((testimonial, index) => renderTestimonial(testimonial, index))}
       </div>
       <div className="flex justify-center mt-4 space-x-4">
-        <ArrowButton direction="left" onClick={prevTestimonial} />
-        <ArrowButton direction="right" onClick={nextTestimonial} />
+        <ArrowButton direction="left" onClick={prevTestimonial} disabled={isAtStart} />
+        <ArrowButton direction="right" onClick={nextTestimonial} disabled={isAtEnd} />
       </div>
     </div>
   );

@@ -49,25 +49,26 @@ const PortfolioDetail = ({ portfolioName }) => {
       }
 
       setMatchedPortfolio(matchingPortfolio);
-      const milestoneList = [
-        {
-          title: matchingPortfolio?.milestoneOneValue,
-          desc: matchingPortfolio?.milestoneOneDescription,
-        },
-        {
-          title: matchingPortfolio?.milestoneTwoValue,
-          desc: matchingPortfolio?.milestoneTwoDescription,
-        },
-        {
-          title: matchingPortfolio?.milestoneThreeValue,
-          desc: matchingPortfolio?.milestoneThreeDescription,
-        },
-        {
-          title: matchingPortfolio?.milestoneFourValue,
-          desc: matchingPortfolio?.milestoneFourDescription,
-        },
-      ]
-      setKeyMileStoneList(milestoneList)
+      let milestoneList = [];
+      
+      const milestones = [
+        { value: matchingPortfolio?.milestoneOneValue, desc: matchingPortfolio?.milestoneOneDescription },
+        { value: matchingPortfolio?.milestoneTwoValue, desc: matchingPortfolio?.milestoneTwoDescription },
+        { value: matchingPortfolio?.milestoneThreeValue, desc: matchingPortfolio?.milestoneThreeDescription },
+        { value: matchingPortfolio?.milestoneFourValue, desc: matchingPortfolio?.milestoneFourDescription }
+      ];
+
+      milestones.forEach(milestone => {
+        if (milestone.value) {
+          milestoneList.push({
+            title: milestone.value,
+            desc: milestone.desc,
+          });
+        }
+      });
+
+      setKeyMileStoneList(milestoneList);
+
       let offeringCardsData = [];
       if (matchingPortfolio?.productOfferings) {
         offeringCardsData.push({
@@ -206,24 +207,25 @@ const PortfolioDetail = ({ portfolioName }) => {
             </div>
           </div>
 
-          {/* Our Key Milestones*/}
-          <div className="grid-main-container pt-12 lg:pt80">
-            <div className="grid-container">
-              <div className="statsContainer pt-8 lg:pt30 overflow-hidden">
-                <div className="relative grid p-3 grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-10">
-                  {keyMileStoneList.map((statsData, i) => (
-                    <Stats
-                      key={i}
-                      statsTitle={statsData.title}
-                      statsDesc={statsData.desc}
-                      hiddenAnimation={false}
-                    />
-                  ))}
-                  <Stats />
+          {/* Our Key Milestones */}
+          {keyMileStoneList.length > 0 && (
+            <div className="grid-main-container pt-12 lg:pt80">
+              <div className="grid-container">
+                <div className="statsContainer pt-8 lg:pt30 pb-8 lg:pb30 overflow-hidden">
+                  <div className={`relative grid p-3 grid-cols-1 lg:grid-cols-${Math.min(keyMileStoneList.length, 4)} gap-6 lg:gap-10`}>
+                    {keyMileStoneList.map((statsData, i) => (
+                      <Stats
+                        key={i}
+                        statsTitle={statsData.title}
+                        statsDesc={statsData.desc}
+                        hiddenAnimation={false}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Our Services */}
           <div className="grid-main-container mt-4">
