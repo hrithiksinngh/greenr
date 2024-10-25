@@ -90,6 +90,37 @@ export default function ProductListing() {
     subSectors: {}
   });
 
+  // Inside the ProductListing component, add these new state variables and functions
+  const [isSticky, setIsSticky] = useState(false);
+  const mobileControlsRef = useRef(null);
+  const originalFilterSectionRef = useRef(null);
+
+  useEffect(() => {
+    const header = document.querySelector('header'); // Adjust this selector to match your header
+    const headerHeight = header ? header.offsetHeight : 0;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: `-${headerHeight}px 0px 0px 0px`,
+        threshold: 0,
+      }
+    );
+
+    if (originalFilterSectionRef.current) {
+      observer.observe(originalFilterSectionRef.current);
+    }
+
+    return () => {
+      if (originalFilterSectionRef.current) {
+        observer.unobserve(originalFilterSectionRef.current);
+      }
+    };
+  }, []);
+
   // Modify the useEffect hook that sets up dynamic filters
   useEffect(() => {
     if (portfolioData?.data?.response) {
@@ -290,113 +321,115 @@ export default function ProductListing() {
           <h1 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Our Portfolio</h1>
 
           {/* Description and Controls */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6">
-            <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-0">Explore innovative green companies scaling to mitigate environmental degradation</p>
-            <div className="flex flex-col md:flex-row w-full md:w-auto">
-              {/* Mobile view: Search, Sort and Filter */}
-              <div className="flex items-center justify-between mb-2 md:mb-0 md:hidden w-full">
-                {/* Mobile Search */}
-                <div className="flex-grow mr-2">
-                  <MobileSearch
-                    searchTerm={searchTerm}
-                    handleSearchChange={handleSearchChange}
-                    handleClearSearch={handleClearSearch}
-                    searchInputRef={searchInputRef}
-                  />
+          <div ref={originalFilterSectionRef}>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6">
+              <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-0">Explore innovative green companies scaling to mitigate environmental degradation</p>
+              <div className="flex flex-col md:flex-row w-full md:w-auto">
+                {/* Mobile view: Search, Sort and Filter */}
+                <div className="flex items-center justify-between mb-2 md:mb-0 md:hidden w-full">
+                  {/* Mobile Search */}
+                  <div className="flex-grow mr-2">
+                    <MobileSearch
+                      searchTerm={searchTerm}
+                      handleSearchChange={handleSearchChange}
+                      handleClearSearch={handleClearSearch}
+                      searchInputRef={searchInputRef}
+                    />
+                  </div>
+
+                  {/* Custom Sort Dropdown */}
+                  {/* <div className="relative" ref={sortDropdownRef}>
+                  <button
+                    className="flex items-center justify-center bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
+                    onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                  >
+                    <MdOutlineSort className="text-[#000000]" size={20} />
+                  </button>
+                  {isSortDropdownOpen && (
+                    <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
+                      <ul className="py-1">
+                        <li
+                          className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleSortChange('Type of Waste')}
+                        >
+                          Type of Waste
+                        </li>
+                        {filters.typeOfWaste.map(type => (
+                          <li
+                            key={type}
+                            className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleSortChange(type)}
+                          >
+                            {type}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div> */}
+
+                  {/* Mobile Filter Button */}
+                  <button
+                    className="flex items-center justify-center ml-2 px-3 py-2 text-xs bg-[#4d7297] text-white rounded"
+                    onClick={() => setIsMobileFiltersOpen(true)}
+                  >
+                    <FaFilter size={14} className="mr-2" />
+                    <span>Filters</span>
+                  </button>
                 </div>
 
-                {/* Custom Sort Dropdown */}
-                {/* <div className="relative" ref={sortDropdownRef}>
-                <button
-                  className="flex items-center justify-center bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
-                  onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                >
-                  <MdOutlineSort className="text-[#000000]" size={20} />
-                </button>
-                {isSortDropdownOpen && (
-                  <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
-                    <ul className="py-1">
-                      <li
-                        className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleSortChange('Type of Waste')}
-                      >
-                        Type of Waste
-                      </li>
-                      {filters.typeOfWaste.map(type => (
+                {/* Desktop view: Sort Dropdown and View Switcher */}
+                <div className="hidden md:flex items-center space-x-4">
+                  {/* Custom Sort Dropdown for desktop */}
+                  {/* <div className="relative" ref={sortDropdownRef}>
+                  <button
+                    className="flex items-center space-x-2 bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
+                    onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                  >
+                    <MdOutlineSort className="text-[#000000]" size={20} />
+                    <span className="max-w-[120px] truncate">Sort by: {truncateText(sortBy, 20)}</span>
+                    <MdKeyboardArrowDown className={`transition-transform duration-300 ${isSortDropdownOpen ? 'rotate-180' : ''}`} size={20} />
+                  </button>
+                  {isSortDropdownOpen && (
+                    <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
+                      <ul className="py-1">
                         <li
-                          key={type}
                           className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleSortChange(type)}
+                          onClick={() => handleSortChange('Type of Waste')}
                         >
-                          {type}
+                          Type of Waste
                         </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div> */}
-
-                {/* Mobile Filter Button */}
-                <button
-                  className="flex items-center justify-center ml-2 px-3 py-2 text-xs bg-[#4d7297] text-white rounded"
-                  onClick={() => setIsMobileFiltersOpen(true)}
-                >
-                  <FaFilter size={14} className="mr-2" />
-                  <span>Filters</span>
-                </button>
-              </div>
-
-              {/* Desktop view: Sort Dropdown and View Switcher */}
-              <div className="hidden md:flex items-center space-x-4">
-                {/* Custom Sort Dropdown for desktop */}
-                {/* <div className="relative" ref={sortDropdownRef}>
-                <button
-                  className="flex items-center space-x-2 bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
-                  onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                >
-                  <MdOutlineSort className="text-[#000000]" size={20} />
-                  <span className="max-w-[120px] truncate">Sort by: {truncateText(sortBy, 20)}</span>
-                  <MdKeyboardArrowDown className={`transition-transform duration-300 ${isSortDropdownOpen ? 'rotate-180' : ''}`} size={20} />
-                </button>
-                {isSortDropdownOpen && (
-                  <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
-                    <ul className="py-1">
-                      <li
-                        className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleSortChange('Type of Waste')}
-                      >
-                        Type of Waste
-                      </li>
-                      {filters.typeOfWaste.map(type => (
-                        <li
-                          key={type}
-                          className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleSortChange(type)}
-                        >
-                          {type}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div> */}
-                {/* View Switcher - Only visible on desktop */}
-                <button
-                  className="flex items-center space-x-2 p-2 text-xs"
-                  onClick={() => switchView(view === 'grid' ? 'list' : 'grid')}
-                >
-                  {view === 'grid' ? (
-                    <>
-                      <FaList size={14} className="text-[#3449B2] text-xs" />
-                      <span className="text-[#3449B2] text-xs">List View</span>
-                    </>
-                  ) : (
-                    <>
-                      <BsGrid size={14} className="text-[#3449B2] text-xs" />
-                      <span className="text-[#3449B2] text-xs">Grid View</span>
-                    </>
+                        {filters.typeOfWaste.map(type => (
+                          <li
+                            key={type}
+                            className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleSortChange(type)}
+                          >
+                            {type}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
-                </button>
+                </div> */}
+                  {/* View Switcher - Only visible on desktop */}
+                  <button
+                    className="flex items-center space-x-2 p-2 text-xs"
+                    onClick={() => switchView(view === 'grid' ? 'list' : 'grid')}
+                  >
+                    {view === 'grid' ? (
+                      <>
+                        <FaList size={14} className="text-[#3449B2] text-xs" />
+                        <span className="text-[#3449B2] text-xs">List View</span>
+                      </>
+                    ) : (
+                      <>
+                        <BsGrid size={14} className="text-[#3449B2] text-xs" />
+                        <span className="text-[#3449B2] text-xs">Grid View</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -643,6 +676,41 @@ export default function ProductListing() {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Mobile Controls - Sticky below header */}
+          <div 
+            ref={mobileControlsRef}
+            className={`md:hidden fixed left-0 right-0 bg-white z-40 transition-all duration-300 ${
+              isSticky ? 'shadow-md' : 'pointer-events-none opacity-0'
+            }`}
+            style={{
+              top: 'var(--header-height, 70px)', // Adjust to match your header height
+              transform: isSticky ? 'translateY(0)' : 'translateY(-100%)',
+            }}
+          >
+            <div className="container mx-auto py-2">
+              <div className="flex items-center justify-between">
+                {/* Mobile Search */}
+                <div className="flex-grow mr-2">
+                  <MobileSearch
+                    searchTerm={searchTerm}
+                    handleSearchChange={handleSearchChange}
+                    handleClearSearch={handleClearSearch}
+                    searchInputRef={searchInputRef}
+                  />
+                </div>
+
+                {/* Mobile Filter Button */}
+                <button
+                  className="flex items-center justify-center ml-2 px-3 py-2 text-xs bg-[#4d7297] text-white rounded"
+                  onClick={() => setIsMobileFiltersOpen(true)}
+                >
+                  <FaFilter size={14} className="mr-2" />
+                  <span>Filters</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
