@@ -8,7 +8,7 @@ import ImgOverlay from "../../components/imgOverlay/imgOverlay";
 import TransitionCard from "../../components/transitionCard/transitionCard";
 import DisclosureX from "../../components/customDisc/customDisc";
 import { getImageUrl } from "../../utils/images";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import animation from "../../utils/animation";
 import { UseOurPartnerData } from "../../utils/teamsData";
 import {
@@ -46,6 +46,8 @@ const IndexPage = () => {
   let { data: entrepreneurWinsTestimonials } = UseEntrepreneurWinsTestimonials();
   const entrepreneurWinsTestimonialsData = entrepreneurWinsTestimonials && entrepreneurWinsTestimonials.data.response;
   console.log("Entrepreneur Wins Testimonials Data:", entrepreneurWinsTestimonialsData);
+
+  const [openSector, setOpenSector] = useState(null);
 
   useEffect(() => {
     animation.afterCallback(
@@ -410,12 +412,14 @@ consumption.</strong></p>`,
             {sectorsIncludedData && sectorsIncludedData.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {sectorsIncludedData.map((data, i) => (
-                  <div key={`DX-sectors-include-${i}`}> {/* Removed hiddenAnimation class */}
+                  <div key={`DX-sectors-include-${i}`}>
                     <DisclosureSectorsInclude
                       iconUrl={data.icon}
                       disTitle={data.title}
                       disDesc={data.description}
                       isIcon={true}
+                      isOpen={openSector === i}
+                      onClick={() => setOpenSector(openSector === i ? null : i)}
                     />
                   </div>
                 ))}
