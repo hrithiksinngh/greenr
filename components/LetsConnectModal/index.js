@@ -154,7 +154,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
                   required
                   rows={4}
                   className={inputClasses}
-                  placeholder="Enter your message here"
+                  placeholder="Please mention your reason for connecting with us. Are you interested in sourcing the product/service or are you seeking a partnership or collaboration?"
                   value={formData.message}
                   onChange={handleInputChange}
                 />
