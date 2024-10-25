@@ -40,10 +40,7 @@ const PortfolioDetail = ({ portfolioName }) => {
   useEffect(() => {
     if (!isLoading && portfolioData?.data?.response) {
       const matchingPortfolio = portfolioData.data.response.find(portfolio => {
-        const urlFriendlyTitle = portfolio.startupTitle
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9-]/g, '');
+        const urlFriendlyTitle = portfolio.startupTitle.toLowerCase().replace(/ /g, '-');
         return urlFriendlyTitle === portfolioName;
       });
 
@@ -163,7 +160,7 @@ const PortfolioDetail = ({ portfolioName }) => {
           {/* HERO SECTION */}
           <div className="patternBg aboutUsHero">
             <div className="grid-main-container">
-              <div className="grid-container grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
+              <div className={`grid-container grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 ${matchedPortfolio?.businessDescription?.length < 300 ? 'lg:-mb-10' : ''}`}>
                 <div className={`col-span-1 lg:col-span-3 leftCol pt-8 lg:pt60`}>
                   {/* Breadcrumb */}
                   <div className="flex flex-wrap items-center space-x-2 text-xs lg:text-xs mb-4">
@@ -255,7 +252,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                     </div>
                     <div className="flex-grow mt-4 lg:mt-8">
                       <p className="text-sm lg:text-lg text-[#6B9080]">{item.title}</p>
-                      <p className="font-semibold text-gray-800 text-base lg:text-xl">{item.value || "N.A."}</p>
+                      <p className="font-semibold text-gray-800 text-base lg:text-lg">{item.value || "N.A."}</p>
                     </div>
                     {/* Right border for left column items (desktop only) */}
                     {index % 2 === 0 && index < 5 && (
@@ -281,17 +278,17 @@ const PortfolioDetail = ({ portfolioName }) => {
           </div>
 
           {/* PARTNERS SECTION */}
-          <div className="pb-12 lg:pb60">
+          {ourPartnerImgData && ourPartnerImgData?.length > 0 && <div className="pb-12 lg:pb60">
             <div className="grid-main-container pt-12 lg:pt60">
               <div className="grid-container">
                 <Title
                   title={"Co-operates worked with"}
-                  externalClass={`text-xl lg:text-2xl pb-6 lg:pb10 hiddenAnimation`}
+                  externalClass={`text-xl lg:text-2xl pb-6 lg:pb10`}
                 />
               </div>
             </div>
             <MarqueeNew imgSrcList={ourPartnerImgData} />
-          </div>
+          </div>}
 
           {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
             <Carousel handleConnect={() => setIsOpen(true)} slides={foundersCarouselData?.data?.response} />

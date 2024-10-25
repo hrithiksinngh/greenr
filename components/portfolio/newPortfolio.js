@@ -17,6 +17,7 @@ import Link from 'next/link';
 // Add these imports at the top of the file
 import { UseOurPortfolioData } from "../../utils/portfolioCarouselData";
 import { ThreeDots } from "react-loader-spinner";
+import Icon from '../icon/icon';
 
 // At the top of your file, add these custom icon components:
 const LightChevronDown = () => (
@@ -43,7 +44,7 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
     <input
       ref={searchInputRef}
       type="text"
-      placeholder='Search by "State/Company"'
+      placeholder='State/Company'
       className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
       value={searchTerm}
       onChange={handleSearchChange}
@@ -426,7 +427,7 @@ export default function ProductListing() {
                       <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder='Search by "State/Company"'
+                        placeholder='State/Company'
                         className="w-full pl-8 pr-0 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
                         value={searchTerm}
                         onChange={handleSearchChange}
@@ -630,7 +631,15 @@ export default function ProductListing() {
                     />
                   </div>
                 ) : (
-                  <p className="text-center mt-6 text-gray-500">No products found matching your criteria.</p>
+                  <div className="flex flex-col items-center justify-center mt-6">
+                    <Icon
+                      name="not-found"
+                      width={128}
+                      height={150}
+                      className="text-gray-400"
+                    />
+                    <p className="text-center text-gray-500 mt-6 mb-12">No products found matching your criteria.</p>
+                  </div>
                 )}
               </div>
             )}

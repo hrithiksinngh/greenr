@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { UsePostFormData } from '../../utils/formSubmit'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function LetsConnectModal({ isOpen, setIsOpen }) {
   const { mutate, isLoading, isSuccess, isError } = UsePostFormData();
@@ -33,9 +34,9 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     mutate(formData, {
       onSuccess: () => {
         setMessage('Form submitted successfully!');
-        setTimeout(() => {
-          setIsOpen(false);
-        }, 2000);
+        // setTimeout(() => {
+        //   setIsOpen(false);
+        // }, 2000);
       },
       onError: (error) => {
         setMessage('Failed to submit form. Please try again.');
@@ -60,7 +61,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
 
   if (!isOpen) return null;
 
-  const inputClasses = "block px-3 py-3 w-full text-sm text-gray-900 bg-transparent rounded border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 placeholder-[#b2b2b2]"
+  const inputClasses = "block px-3 py-3 w-full text-sm text-gray-900 bg-transparent rounded border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black placeholder-[#b2b2b2]"
 
   const LabelWithAsterisk = ({ children, required }) => (
     <label className="absolute text-xs text-gray-500 bg-white px-1 top-[-0.5rem] left-3 z-10">
@@ -80,7 +81,11 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
         </div>
 
         <div className="p-6 sm:p-12 sm:pt-6 sm:pb-8">
-          {isLoading && <div className="text-center">Loading...</div>}
+          {isLoading && (
+            <div className="flex justify-center items-center h-64">
+              <ThreeDots color="#6b9080" height={80} width={80} />
+            </div>
+          )}
           {message && (
             <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-green-500' : 'text-red-500'}`}>
               {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
@@ -158,7 +163,7 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
               <div className="mt-6 flex justify-end">
                 <button
                   type="submit"
-                  className="bg-[#4d7297] text-white rounded py-2 px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="bg-[#6b9080] text-white rounded py-2 px-6 focus:outline-none"
                 >
                   Submit
                 </button>

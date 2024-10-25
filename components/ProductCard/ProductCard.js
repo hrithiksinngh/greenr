@@ -46,7 +46,7 @@ const ProductCard = ({ product, view }) => {
             </p>
             <p className="text-xs text-[#00000099] mb-4 flex-grow" style={descriptionStyle}>{product.businessDescription}</p>
             {product.isFactsheetAvailable !== 'No' && (
-              <button className="bg-[#4d7297] text-white px-4 py-2 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-xs font-semibold mt-auto w-fit">
+              <button className="bg-[#4d7297] text-white px-4 py-2 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-xs font-semibold mt-auto w-fit" onClick={() => window.location.href = `/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`}>
                 View Factsheet
                 <FaChevronRight className="ml-2" size={10} />
               </button>
