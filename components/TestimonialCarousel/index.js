@@ -85,15 +85,15 @@ const TestimonialCarousel = ({ testimonials }) => {
   const renderTestimonial = (testimonial, index) => (
     <div 
       key={index} 
-      className={`bg-white shadow-md rounded-lg w-full sm:w-80 flex-shrink-0 flex flex-col 
+      className={`relative pb-20 bg-white shadow-md rounded-lg w-full sm:w-80 flex-shrink-0 flex flex-col 
         sm:block
         ${index !== currentIndex ? 'hidden' : ''}
         transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
     >
       {renderMedia(testimonial)}
-      <div className="p-6 flex flex-col flex-grow">
+      <div className="p-6 pb-0 flex flex-col flex-grow">
         <p className="text-gray-700 mb-4 text-[14px] flex-grow">{testimonial.description}</p>
-        <div className="flex items-center mt-auto">
+        <div className="flex items-center mt-auto absolute bottom-0 left-0 p-4">
           <img 
             src={testimonial.avatar} 
             alt={testimonial.name} 

@@ -34,7 +34,7 @@ const ProductCard = ({ product, view }) => {
           <div className="p-6 flex flex-col flex-grow">
             <div className="flex flex-wrap gap-2 mb-2">
               {product?.subSector?.split(',').slice(0, 2).map(tag => (
-                <span key={tag.trim()} className="bg-[#f5f5f5] text-[#000000D9] text-[0.65rem] px-2.5 py-1.5 rounded-xl">
+                <span key={tag.trim()} className="bg-[#f5f5f5] text-[#000000D9] font-semibold text-[0.55rem] md:text-[0.6rem] px-2.5 py-1.5 rounded-xl">
                   {tag.trim()}
                 </span>
               ))}

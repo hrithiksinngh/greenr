@@ -380,55 +380,31 @@ export default function ProductListing() {
 
                 {/* Desktop view: Sort Dropdown and View Switcher */}
                 <div className="hidden md:flex items-center space-x-4">
-                  {/* Custom Sort Dropdown for desktop */}
-                  {/* <div className="relative" ref={sortDropdownRef}>
-                  <button
-                    className="flex items-center space-x-2 bg-white rounded-md py-2 px-3 text-xs border border-[#e5e5e5] focus:outline-none focus:ring-0 focus:border-[#e5e5e5]"
-                    onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                  >
-                    <MdOutlineSort className="text-[#000000]" size={20} />
-                    <span className="max-w-[120px] truncate">Sort by: {truncateText(sortBy, 20)}</span>
-                    <MdKeyboardArrowDown className={`transition-transform duration-300 ${isSortDropdownOpen ? 'rotate-180' : ''}`} size={20} />
-                  </button>
-                  {isSortDropdownOpen && (
-                    <div className="absolute z-10 mt-1 w-full bg-white border border-[#e5e5e5] rounded-md shadow-lg">
-                      <ul className="py-1">
-                        <li
-                          className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleSortChange('Type of Waste')}
-                        >
-                          Type of Waste
-                        </li>
-                        {filters.typeOfWaste.map(type => (
-                          <li
-                            key={type}
-                            className="px-3 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                            onClick={() => handleSortChange(type)}
-                          >
-                            {type}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div> */}
                   {/* View Switcher - Only visible on desktop */}
-                  <button
-                    className="flex items-center space-x-2 p-2 text-xs"
-                    onClick={() => switchView(view === 'grid' ? 'list' : 'grid')}
-                  >
-                    {view === 'grid' ? (
-                      <>
-                        <FaList size={14} className="text-[#3449B2] text-xs" />
-                        <span className="text-[#3449B2] text-xs">List View</span>
-                      </>
-                    ) : (
-                      <>
-                        <BsGrid size={14} className="text-[#3449B2] text-xs" />
-                        <span className="text-[#3449B2] text-xs">Grid View</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                    <button
+                      className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs transition-all duration-200 ${
+                        view === 'grid' 
+                          ? 'bg-white text-[#3449B2] shadow-sm' 
+                          : 'text-gray-600 hover:text-[#3449B2]'
+                      }`}
+                      onClick={() => switchView('grid')}
+                    >
+                      <BsGrid size={14} />
+                      <span>Grid</span>
+                    </button>
+                    <button
+                      className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs transition-all duration-200 ${
+                        view === 'list' 
+                          ? 'bg-white text-[#3449B2] shadow-sm' 
+                          : 'text-gray-600 hover:text-[#3449B2]'
+                      }`}
+                      onClick={() => switchView('list')}
+                    >
+                      <FaList size={14} />
+                      <span>List</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -612,7 +588,7 @@ export default function ProductListing() {
                             {product.subSector.split(',').map(tag => (
                               <span
                                 key={tag}
-                                className="bg-[#f5f5f5] text-[#000000D9] text-[0.6rem] sm:text-[0.65rem] md:text-[0.7rem] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-xl"
+                                className="bg-[#f5f5f5] text-[#000000D9] text-[0.55rem] font-semibold sm:text-[0.55rem] md:text-[0.6rem] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-xl"
                               >
                                 {tag.trim()}
                               </span>
