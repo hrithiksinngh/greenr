@@ -31,6 +31,7 @@ const PortfolioDetail = ({ portfolioName }) => {
   const [cards, setCards] = useState([])
   const [infoItems, setInfoItems] = useState([])
   const [ourPartnerImgData, setOurPartnerImgData] = useState([])
+  const [foundersCarouselSlides, setFoundersCarouselSlides] = useState([])
 
   useEffect(() => {
     animation.afterCallback(
@@ -40,6 +41,16 @@ const PortfolioDetail = ({ portfolioName }) => {
       )
     );
   }, []);
+
+  useEffect(() => {
+    if (foundersCarouselData?.data?.response?.length > 0 && matchedPortfolio) {
+      // setFoundersCarouselSlides(foundersCarouselData?.data?.response);
+      const filteredSlides = foundersCarouselData?.data?.response.filter(slide => 
+        slide.startupTitle === matchedPortfolio?.startupTitle
+      );
+      setFoundersCarouselSlides(filteredSlides);
+    }
+  }, [foundersCarouselData, matchedPortfolio]);
 
   useEffect(() => {
     if (!isLoading && portfolioData?.data?.response) {
@@ -300,8 +311,8 @@ const PortfolioDetail = ({ portfolioName }) => {
             <MarqueeNew imgSrcList={ourPartnerImgData} />
           </div>}
 
-          {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
-            <Carousel handleConnect={() => setIsOpen(true)} slides={foundersCarouselData?.data?.response} />
+          {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && foundersCarouselSlides?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
+            <Carousel handleConnect={() => setIsOpen(true)} slides={foundersCarouselSlides} />
           </div>}
 
           <LetsConnectModal isOpen={isOpen} setIsOpen={setIsOpen} />

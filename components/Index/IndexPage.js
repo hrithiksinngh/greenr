@@ -51,7 +51,7 @@ const IndexPage = () => {
   console.log("Entrepreneur Wins Testimonials Data:", entrepreneurWinsTestimonialsData);
 
   const [openSector, setOpenSector] = useState(null);
-  const [keyMileStoneList, setKeyMileStoneList] = useState([])
+  const [keyMileStoneList, setKeyMileStoneList] = useState([]);
 
   useEffect(() => {
     animation.afterCallback(
@@ -61,6 +61,27 @@ const IndexPage = () => {
       )
     );
   }, []);
+
+  useEffect(() => {
+    if (cohortMilestoneData?.data?.response?.[0]) {
+      const response = cohortMilestoneData.data.response[0];
+      const milestones = [
+        { value: response.milestoneOneValue, desc: response.milestoneOneDescription },
+        { value: response.milestoneTwoValue, desc: response.milestoneTwoDescription },
+        { value: response.milestoneThreeValue, desc: response.milestoneThreeDescription },
+        { value: response.milestoneFourValue, desc: response.milestoneFourDescription }
+      ];
+
+      const formattedMilestones = milestones
+        .filter(milestone => milestone.value)
+        .map(milestone => ({
+          title: milestone.value,
+          desc: milestone.desc,
+        }));
+
+      setKeyMileStoneList(formattedMilestones);
+    }
+  }, [cohortMilestoneData]);
 
   let aboutUsHeroSection = {
     title: "Empowering Founders on a Mission",
@@ -73,29 +94,6 @@ const IndexPage = () => {
 consumption.</strong></p>`,
     imgUrl: getImageUrl({ fileName: "homeBg", folderName: "home" }),
   };
-
-  if(cohortMilestoneData?.data?.response && cohortMilestoneData?.data?.response.length > 0){
-
-  let milestoneList = [];
-      
-      const milestones = [
-        { value: cohortMilestoneData.data.response[0].milestoneOneValue, desc: cohortMilestoneData.data.response[0].milestoneOneDescription },
-        { value: cohortMilestoneData.data.response[0].milestoneTwoValue, desc: cohortMilestoneData.data.response[0].milestoneTwoDescription },
-        { value: cohortMilestoneData.data.response[0].milestoneThreeValue, desc: cohortMilestoneData.data.response[0].milestoneThreeDescription },
-        { value: cohortMilestoneData.data.response[0].milestoneFourValue, desc: cohortMilestoneData.data.response[0].milestoneFourDescription }
-      ];
-
-      milestones.forEach(milestone => {
-        if (milestone.value) {
-          milestoneList.push({
-            title: milestone.value,
-            desc: milestone.desc,
-          });
-        }
-      });
-
-      setKeyMileStoneList(milestoneList);
-  }
 
   let supportedByDataList = [
     {
@@ -128,25 +126,6 @@ consumption.</strong></p>`,
       svgId: "holdOpportunity",
     },
   ];
-
-  // let keyMileStoneList = [
-  //   {
-  //     title: "100+",
-  //     desc: "Green Startups",
-  //   },
-  //   {
-  //     title: "53",
-  //     desc: "Cities",
-  //   },
-  //   {
-  //     title: "54%",
-  //     desc: "Women-led Businesses",
-  //   },
-  //   {
-  //     title: "$1mn",
-  //     desc: "Investment Facilitated",
-  //   },
-  // ];
 
   let setApartDataList = [
     {
@@ -289,7 +268,7 @@ consumption.</strong></p>`,
           <div className="statsContainer pt30 overflow-hidden">
             <Title
               title={"Cohort 1 Key Milestones"}
-              externalClass={`pt-4 pb10 hiddenAnimation ml-12 mb-4`}
+              externalClass={`pt-4 pb10 ml-12 mb-4`}
             />
 
             <div className="relative grid p-3 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-10">
