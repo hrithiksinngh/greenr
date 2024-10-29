@@ -430,7 +430,7 @@ export default function ProductListing() {
                       handleSearchChange={handleSearchChange}
                       handleClearSearch={handleClearSearch}
                       searchInputRef={searchInputRef}
-                      statesAndUtsData={statesAndUtsData?.response}
+                      statesAndUtsData={statesAndUtsData?.data?.response}
                       onStateSelect={handleStateSelect}
                     />
                   </div>
@@ -535,7 +535,7 @@ export default function ProductListing() {
                         handleSearchChange={handleSearchChange}
                         handleClearSearch={handleClearSearch}
                         searchInputRef={searchInputRef}
-                        statesAndUtsData={statesAndUtsData?.response}
+                        statesAndUtsData={statesAndUtsData?.data?.response}
                         onStateSelect={handleStateSelect}
                       />
                     </div>
@@ -763,7 +763,7 @@ export default function ProductListing() {
                     handleSearchChange={handleSearchChange}
                     handleClearSearch={handleClearSearch}
                     searchInputRef={searchInputRef}
-                    statesAndUtsData={statesAndUtsData?.response}
+                    statesAndUtsData={statesAndUtsData?.data?.response}
                     onStateSelect={handleStateSelect}
                   />
                 </div>

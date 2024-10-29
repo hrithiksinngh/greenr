@@ -274,6 +274,7 @@ consumption.</strong></p>`,
             <div className="relative grid p-3 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-10">
               {keyMileStoneList.map((statsData, i) => (
                 <Stats
+                  hiddenAnimation={false}
                   key={i}
                   statsTitle={statsData.title}
                   statsDesc={statsData.desc}
