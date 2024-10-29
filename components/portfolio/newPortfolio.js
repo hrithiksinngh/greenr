@@ -111,7 +111,7 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
         <input
           ref={searchInputRef}
           type="text"
-          placeholder='Search State'
+          placeholder='State'
           className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
           value={inputValue}
           onChange={handleInputChange}
