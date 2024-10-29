@@ -60,6 +60,94 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
   </div>
 );
 
+// First, add this new component near the top of the file, after other component imports
+const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, onStateSelect }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const dropdownRef = useRef(null);
+  
+  const filteredStates = statesAndUtsData?.filter(state =>
+    state.toLowerCase().includes(inputValue.toLowerCase())
+  ) || [];
+
+  // Add useEffect for click outside handling
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setIsOpen(true);
+  };
+
+  const handleStateClick = (state) => {
+    setInputValue(state);
+    onStateSelect(state);
+    setIsOpen(false);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    handleClearSearch();
+    setIsOpen(false);
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <div className="relative">
+        <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <input
+          ref={searchInputRef}
+          type="text"
+          placeholder='Search State'
+          className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
+          value={inputValue}
+          onChange={handleInputChange}
+          onFocus={() => setIsOpen(true)}
+        />
+        {inputValue && (
+          <button
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={handleClear}
+          >
+            <FaTimes size={16} />
+          </button>
+        )}
+      </div>
+      
+      {isOpen && inputValue && (
+        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+          {filteredStates?.length > 0 ? (
+            filteredStates.map((state) => (
+              <div
+                key={state}
+                className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleStateClick(state)}
+              >
+                {state}
+              </div>
+            ))
+          ) : (
+            <div className="px-4 py-2 text-xs text-gray-500">No states found</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function ProductListing() {
   // Add this near the top of your component
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
@@ -198,7 +286,14 @@ export default function ProductListing() {
   // Modify the filteredProducts calculation
   const filteredProducts = sortProducts(
     (portfolioData?.data?.response || []).filter(product => {
-      // If no filters are selected, show all products
+      // First check search term
+      if (searchTerm) {
+        return product.states && product.states.split(',').map(s => s.trim()).some(state => 
+          state.toLowerCase() === searchTerm.toLowerCase()
+        );
+      }
+
+      // If no filters are selected and no search term, show all products
       if (Object.values(selectedFilters).every(arr => arr.length === 0)) {
         return true;
       }
@@ -214,10 +309,7 @@ export default function ProductListing() {
           );
         }
       });
-    }).filter(product =>
-      product.startupTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.companyName.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    })
   );
 
   // Calculate total pages based on filtered products
@@ -268,13 +360,10 @@ export default function ProductListing() {
 
   const handleClearSearch = () => {
     setSearchTerm('');
-    if (searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
   };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+    // This won't be used directly anymore as we're using the dropdown's internal state
   };
 
   // Add this function to toggle open/closed state of filter sections
@@ -293,6 +382,11 @@ export default function ProductListing() {
         [section]: !prev[section]
       }));
     }
+  };
+
+  // Add this new function
+  const handleStateSelect = (state) => {
+    setSearchTerm(state); // Only set the search term when a state is selected
   };
 
   return (
@@ -331,11 +425,13 @@ export default function ProductListing() {
                 <div className="flex items-center justify-between mb-2 md:mb-0 md:hidden w-full">
                   {/* Mobile Search */}
                   <div className="flex-grow mr-2">
-                    <MobileSearch
+                    <StateSearchDropdown
                       searchTerm={searchTerm}
                       handleSearchChange={handleSearchChange}
                       handleClearSearch={handleClearSearch}
                       searchInputRef={searchInputRef}
+                      statesAndUtsData={statesAndUtsData?.response}
+                      onStateSelect={handleStateSelect}
                     />
                   </div>
 
@@ -434,23 +530,14 @@ export default function ProductListing() {
                   <div className="md:mt-0">
                     {/* Desktop search functionality - hide on mobile */}
                     <div className="relative mb-4 hidden md:block">
-                      <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        ref={searchInputRef}
-                        type="text"
-                        placeholder='State/Company'
-                        className="w-full pl-8 pr-0 py-2 focus:outline-none focus:ring-0 border-none text-sm placeholder-[#00000080]"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
+                      <StateSearchDropdown
+                        searchTerm={searchTerm}
+                        handleSearchChange={handleSearchChange}
+                        handleClearSearch={handleClearSearch}
+                        searchInputRef={searchInputRef}
+                        statesAndUtsData={statesAndUtsData?.response}
+                        onStateSelect={handleStateSelect}
                       />
-                      {searchTerm && (
-                        <button
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                          onClick={handleClearSearch}
-                        >
-                          <FaTimes size={16} />
-                        </button>
-                      )}
                     </div>
 
                     {/* Divider line - hidden on mobile */}
@@ -671,11 +758,13 @@ export default function ProductListing() {
               <div className="flex items-center justify-between">
                 {/* Mobile Search */}
                 <div className="flex-grow mr-2">
-                  <MobileSearch
+                  <StateSearchDropdown
                     searchTerm={searchTerm}
                     handleSearchChange={handleSearchChange}
                     handleClearSearch={handleClearSearch}
                     searchInputRef={searchInputRef}
+                    statesAndUtsData={statesAndUtsData?.response}
+                    onStateSelect={handleStateSelect}
                   />
                 </div>
 
