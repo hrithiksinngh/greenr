@@ -24,7 +24,7 @@ const DisclosureX = (props) => {
               ) : (
                 ""
               )}
-              <Title title={disTitle} externalClass={` text-left f16`} />
+              <Title title={disTitle} externalClass={` text-left f18 md:f20`} />
             </div>
             <div className="">
               <ChevronDownIcon
@@ -44,7 +44,7 @@ const DisclosureX = (props) => {
           >
             <Disclosure.Panel>
               <Desc
-                externalClass={`text-slate-600 pb30 my-auto transform scale-100  duration-200 ease-out`}
+                externalClass={`text-slate-600 pb30 my-auto transform scale-100  duration-200 ease-out f16 md:f18`}
                 desc={disDesc}
               />
             </Disclosure.Panel>

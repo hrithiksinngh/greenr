@@ -28,7 +28,7 @@ const DisclosureSectorsInclude = (props) => {
               />
             </div>
           )}
-          <Title title={disTitle} externalClass={` text-left f16`} />
+          <Title title={disTitle} externalClass={` text-left f18 md:f20`} />
         </div>
         <div className="">
           <ChevronDownIcon
@@ -49,7 +49,7 @@ const DisclosureSectorsInclude = (props) => {
       >
         <div>
           <Desc
-            externalClass={`text-slate-600 pb30 my-auto transform scale-100  duration-200 ease-out`}
+            externalClass={`text-slate-600 pb30 my-auto transform scale-100  duration-200 ease-out f16 md:f18`}
             desc={disDesc}
           />
         </div>

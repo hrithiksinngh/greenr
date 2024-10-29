@@ -212,7 +212,7 @@ const PortfolioDetail = ({ portfolioName }) => {
           </div>
 
           {/* Our Key Milestones */}
-          {keyMileStoneList.length > 0 && (
+          {keyMileStoneList?.length > 0 && (
             <div className="grid-main-container pt-12 lg:pt80">
               <div className="grid-container">
                 <div className="statsContainer pt-8 lg:pt30 pb-8 lg:pb30 overflow-hidden">
@@ -260,9 +260,9 @@ const PortfolioDetail = ({ portfolioName }) => {
                         <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                       )}
                     </div>
-                    <div className="flex-grow mt-4 lg:mt-8">
-                      <p className="text-sm lg:text-lg text-[#6B9080]">{item.title}</p>
-                      <p className="font-semibold text-gray-800 text-base lg:text-lg">{item.value || "N.A."}</p>
+                    <div className="flex-grow mt-4 lg:mt-4">
+                      <p className="text-md lg:text-lg text-[#6B9080]">{item.title}</p>
+                      <p className="font-semibold text-gray-800 text-base text-sm md:text-md">{item.value || "N.A."}</p>
                     </div>
                     {/* Right border for left column items (desktop only) */}
                     {index % 2 === 0 && index < 5 && (

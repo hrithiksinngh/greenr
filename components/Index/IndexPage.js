@@ -10,7 +10,7 @@ import DisclosureX from "../../components/customDisc/customDisc";
 import { getImageUrl } from "../../utils/images";
 import { useEffect, useState } from "react";
 import animation from "../../utils/animation";
-import { UseOurPartnerData } from "../../utils/teamsData";
+import { UseCohortMilestoneData, UseOurPartnerData } from "../../utils/teamsData";
 import {
   UseOurWinsData,
   UseSectorImageData,
@@ -26,6 +26,9 @@ import { UseEntrepreneurWinsTestimonials, UseSectorsIncludedData } from "../../u
 import DisclosureSectorsInclude from "../customDisc/sectorsInclude";
 
 const IndexPage = () => {
+
+  const { isLoading: cohortMilestoneLoading, data: cohortMilestoneData } = UseCohortMilestoneData();
+
   let { data: ourPartner } = UseOurPartnerData();
   const ourPartnerImgData = ourPartner && ourPartner.data.response;
 
@@ -48,6 +51,7 @@ const IndexPage = () => {
   console.log("Entrepreneur Wins Testimonials Data:", entrepreneurWinsTestimonialsData);
 
   const [openSector, setOpenSector] = useState(null);
+  const [keyMileStoneList, setKeyMileStoneList] = useState([])
 
   useEffect(() => {
     animation.afterCallback(
@@ -69,6 +73,29 @@ const IndexPage = () => {
 consumption.</strong></p>`,
     imgUrl: getImageUrl({ fileName: "homeBg", folderName: "home" }),
   };
+
+  if(cohortMilestoneData?.data?.response && cohortMilestoneData?.data?.response.length > 0){
+
+  let milestoneList = [];
+      
+      const milestones = [
+        { value: cohortMilestoneData.data.response[0].milestoneOneValue, desc: cohortMilestoneData.data.response[0].milestoneOneDescription },
+        { value: cohortMilestoneData.data.response[0].milestoneTwoValue, desc: cohortMilestoneData.data.response[0].milestoneTwoDescription },
+        { value: cohortMilestoneData.data.response[0].milestoneThreeValue, desc: cohortMilestoneData.data.response[0].milestoneThreeDescription },
+        { value: cohortMilestoneData.data.response[0].milestoneFourValue, desc: cohortMilestoneData.data.response[0].milestoneFourDescription }
+      ];
+
+      milestones.forEach(milestone => {
+        if (milestone.value) {
+          milestoneList.push({
+            title: milestone.value,
+            desc: milestone.desc,
+          });
+        }
+      });
+
+      setKeyMileStoneList(milestoneList);
+  }
 
   let supportedByDataList = [
     {
@@ -102,24 +129,24 @@ consumption.</strong></p>`,
     },
   ];
 
-  let keyMileStoneList = [
-    {
-      title: "100+",
-      desc: "Green Startups",
-    },
-    {
-      title: "53",
-      desc: "Cities",
-    },
-    {
-      title: "54%",
-      desc: "Women-led Businesses",
-    },
-    {
-      title: "$1mn",
-      desc: "Investment Facilitated",
-    },
-  ];
+  // let keyMileStoneList = [
+  //   {
+  //     title: "100+",
+  //     desc: "Green Startups",
+  //   },
+  //   {
+  //     title: "53",
+  //     desc: "Cities",
+  //   },
+  //   {
+  //     title: "54%",
+  //     desc: "Women-led Businesses",
+  //   },
+  //   {
+  //     title: "$1mn",
+  //     desc: "Investment Facilitated",
+  //   },
+  // ];
 
   let setApartDataList = [
     {
@@ -257,7 +284,7 @@ consumption.</strong></p>`,
         </div>
       </div>
       {/* Our Key Milestones*/}
-      <div className="grid-main-container pt80">
+      {keyMileStoneList?.length > 0 && <div className="grid-main-container pt80">
         <div className="grid-container">
           <div className="statsContainer pt30 overflow-hidden">
             <Title
@@ -269,7 +296,6 @@ consumption.</strong></p>`,
               {keyMileStoneList.map((statsData, i) => (
                 <Stats
                   key={i}
-                  // statsSvgId={statsData.svgId}
                   statsTitle={statsData.title}
                   statsDesc={statsData.desc}
                 />
@@ -278,7 +304,7 @@ consumption.</strong></p>`,
             </div>
           </div>
         </div>
-      </div>
+      </div>}
       {/* HOW WE HELP SECTION */}
       <div className="bg-p-400 pb60">
         <div className="grid-main-container pt80 ">
@@ -310,6 +336,50 @@ consumption.</strong></p>`,
                   isIcon={true}
                 />
               ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTORS INCLUDE SECTION */}
+      <div className="bg-p-400">
+        <div className="grid-main-container">
+          <div className="grid-container">
+            <Title
+              title={"Sectors include"}
+              externalClass={`hiddenAnimation`}
+            />
+          </div>
+        </div>
+        <div className="grid-main-container pt60 pb60">
+          <div className="grid-container">
+            {sectorsIncludedData && sectorsIncludedData.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {sectorsIncludedData.map((data, i) => (
+                  <div key={`DX-sectors-include-${i}`}>
+                    <DisclosureSectorsInclude
+                      iconUrl={data.icon}
+                      disTitle={data.title}
+                      disDesc={data.description}
+                      isIcon={true}
+                      isOpen={openSector === i}
+                      onClick={() => setOpenSector(openSector === i ? null : i)}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No sectors data available</p>
+            )}
+            <div className="flex justify-end items-end text-info font-normal pr-6 f22 pt20">
+              …and many more new frontiers.
+            </div>
+            <div className="flex justify-center pt30">
+              <Button
+                externalClass={`infoBtn mt30 text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded large`}
+                buttonText={`OMG! It's me`}
+                buttonHrefLink={buttonHrefLink ? buttonHrefLink : ""}
+              />
             </div>
           </div>
         </div>
@@ -397,52 +467,8 @@ consumption.</strong></p>`,
         </div>
       </div>
 
-      {/* SECTORS INCLUDE SECTION */}
-      <div className="bg-p-400">
-        <div className="grid-main-container pt80">
-          <div className="grid-container">
-            <Title
-              title={"Sectors include"}
-              externalClass={`hiddenAnimation`}
-            />
-          </div>
-        </div>
-        <div className="grid-main-container pt60 pb60">
-          <div className="grid-container">
-            {sectorsIncludedData && sectorsIncludedData.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {sectorsIncludedData.map((data, i) => (
-                  <div key={`DX-sectors-include-${i}`}>
-                    <DisclosureSectorsInclude
-                      iconUrl={data.icon}
-                      disTitle={data.title}
-                      disDesc={data.description}
-                      isIcon={true}
-                      isOpen={openSector === i}
-                      onClick={() => setOpenSector(openSector === i ? null : i)}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>No sectors data available</p>
-            )}
-            <div className="flex justify-end items-end text-info font-normal pr-6 f22 pt20">
-              …and many more new frontiers.
-            </div>
-            <div className="flex justify-center pt30">
-              <Button
-                externalClass={`infoBtn mt30 text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded large`}
-                buttonText={`OMG! It's me`}
-                buttonHrefLink={buttonHrefLink ? buttonHrefLink : ""}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {entrepreneurWinsTestimonialsData && entrepreneurWinsTestimonialsData.length > 0 && <div className="w-full py-10 mb-10 mt-16">
-        <h1 className="grid-main-container text-3xl font-bold mb-10 px-4">Entrepreneur Wins Testimonials</h1>
+        <h1 className="grid-main-container text-3xl font-bold mb-10 px-4">{entrepreneurWinsTestimonialsData[0].testimonialsHeading || 'Entrepreneur Wins Testimonials'}</h1>
         <TestimonialCarousel testimonials={entrepreneurWinsTestimonialsData} />
       </div>}
     </>

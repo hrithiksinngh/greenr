@@ -15,6 +15,10 @@ const fetchWeAreFamous = () => {
   return axios.get(`https://server2.getgreenr.org/api/user/logo/we-are-famous`);
 };
 
+export const fetchCohortMilestoneData = () => {
+  return axios.get(`https://server2.getgreenr.org/api/home-page/cohort-milestones`);
+};
+
 export const UseTeamsData = (heroId) => {
   const queryClient = useQueryClient();
   return useQuery(["user-hero", heroId], fetchTeamsData, {
@@ -61,4 +65,8 @@ export const UseWeAreFamousData = (heroId) => {
       }
     },
   });
+};
+
+export const UseCohortMilestoneData = () => {
+  return useQuery(["cohortMilestoneData"], fetchCohortMilestoneData);
 };

@@ -16,11 +16,15 @@ const Footer = () => {
     },
     {
       title: "instagram",
-      link: "https://www.instagram.com/technoserve/",
+      link: "https://www.instagram.com/technoserve_india/",
     },
     {
       title: "twitter",
       link: "https://twitter.com/TechnoServe",
+    },
+    {
+      title: "youtube",
+      link: "https://www.youtube.com/@technoserve/videos",
     },
     // {
     //   title: 'telegram',
@@ -70,7 +74,7 @@ const Footer = () => {
               <Icon svgStyleClass="h-[20px] w-[30px]" name="mail" />
               <span>hello@getgreenr.org</span>
             </div>
-            <EmailInput />
+            {/* <EmailInput /> */}
           </div>
 
           <div className={`col-span-1`}>

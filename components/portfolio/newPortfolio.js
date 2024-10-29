@@ -15,7 +15,7 @@ import Pagination from '../Pagination/Pagination';
 import Link from 'next/link';
 
 // Add these imports at the top of the file
-import { UseOurPortfolioData } from "../../utils/portfolioCarouselData";
+import { UseOurPortfolioData, UseStatesAndUtsData } from "../../utils/portfolioCarouselData";
 import { ThreeDots } from "react-loader-spinner";
 import Icon from '../icon/icon';
 
@@ -63,7 +63,7 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
 export default function ProductListing() {
   // Add this near the top of your component
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
-
+  const { isLoading: statesAndUtsLoading, data: statesAndUtsData } = UseStatesAndUtsData();
   const [view, setView] = useState('grid');
   const [selectedFilters, setSelectedFilters] = useState({});
   const [sortBy, setSortBy] = useState('Type of Waste');  // Change default value
@@ -76,6 +76,8 @@ export default function ProductListing() {
     sectors: true,
     subSectors: {}
   });
+
+  console.log("States and Uts Data:", statesAndUtsData);
 
   const productsPerPage = 8;
 
@@ -617,7 +619,7 @@ export default function ProductListing() {
                           {product.isFactsheetAvailable !== 'No' && (
                             <button
                               className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
-                              onClick={() => window.location.href = `/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`}
+                              onClick={() => window.open(`/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`, '_blank', 'noopener noreferrer')}
                             >
                               View Factsheet
                               <FaChevronRight className="ml-1 sm:ml-2" size={10} />
