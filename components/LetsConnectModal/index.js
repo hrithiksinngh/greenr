@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { IoClose } from 'react-icons/io5'
+import { IoClose, IoCloseCircleSharp } from 'react-icons/io5'
 import { UsePostFormData } from '../../utils/formSubmit'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
+import { TbCircleCheckFilled } from "react-icons/tb";
 import { ThreeDots } from 'react-loader-spinner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -112,18 +113,6 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     }
   };
 
-  const getHeadingClass = () => {
-    if (formSubmitted) return 'text-[#6b9080]';
-    if (submissionFailed) return 'text-[#DF2420]'; // Changed to #DF2420
-    return 'text-[#000000]';
-  }
-
-  const getHeadingText = () => {
-    if (formSubmitted) return 'Thank You!';
-    if (submissionFailed) return 'Oops!';
-    return 'Let\'s Connect';
-  }
-
   const modalContent = (
     <motion.div 
       className="bg-white rounded-lg shadow-xl w-full max-w-2xl relative my-8"
@@ -134,13 +123,13 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
     >
       <div className="flex justify-between items-center p-4 sm:p-6 relative">
         {!isLoading && (
-          <button onClick={() => setIsOpen(false)} className="absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600">
+          <button onClick={() => setIsOpen(false)} className={`absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600 top-6 md:top-6`}>
             <IoClose size={24} className="sm:w-9 sm:h-9" />
           </button>
         )}
-        {!isLoading && (
-          <h2 className={`text-xl sm:text-2xl font-semibold w-full text-center ${getHeadingClass()}`}>
-            {getHeadingText()}
+        {!isLoading && !message && (
+          <h2 className="text-xl sm:text-2xl font-semibold w-full text-center text-black">
+            Let's Connect
           </h2>
         )}
       </div>
@@ -152,9 +141,20 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </div>
         )}
         {message && (
-          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-[#6b9080]' : 'text-[#DF2420]'}`}>
-            {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
-            <p className="mt-2">{message}</p>
+          <div className="flex flex-col items-center justify-center text-center">
+            {isSuccess ? (
+              <>
+                <TbCircleCheckFilled size={64} className="text-[#6b9080]" />
+                <h2 className="text-xl sm:text-2xl font-semibold mt-4 text-black">Thank You!</h2>
+                <p className="mt-2 text-gray-600">{message}</p>
+              </>
+            ) : (
+              <>
+                <IoCloseCircleSharp size={64} className="text-[#DF2420]" />
+                <h2 className="text-xl sm:text-2xl font-semibold mt-4 text-black">Oops!</h2>
+                <p className="mt-2 text-gray-600">{message}</p>
+              </>
+            )}
           </div>
         )}
         {!isLoading && !message && (
@@ -247,14 +247,15 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
       animate="visible"
       exit="exit"
     >
-      <div className="flex justify-between items-center p-4 relative">
+      <div className={`flex justify-between items-center relative ${message ? '' : 'p-4'}`}>
         {!isLoading && (
-          <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600">
+          <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600 top-5 md:top-6">
             <IoClose size={24} />
-          </button>)}
-        {!isLoading && (
-          <h2 className={`text-xl font-semibold w-full text-center ${getHeadingClass()}`}>
-            {getHeadingText()}
+          </button>
+        )}
+        {!isLoading && !message && (
+          <h2 className="text-xl sm:text-2xl font-semibold w-full text-center text-black">
+            Let's Connect
           </h2>
         )}
       </div>
@@ -266,9 +267,20 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
           </div>
         )}
         {message && (
-          <div className={`flex flex-col items-center justify-center text-center ${isSuccess ? 'text-[#6b9080]' : 'text-[#DF2420]'}`}>
-            {isSuccess ? <AiOutlineCheckCircle size={64} /> : <AiOutlineCloseCircle size={64} />}
-            <p className="mt-2">{message}</p>
+          <div className="flex flex-col items-center justify-center text-center mt-6">
+            {isSuccess ? (
+              <>
+                <TbCircleCheckFilled size={64} className="text-[#6b9080]" />
+                <h2 className="text-xl sm:text-2xl font-semibold mt-4 text-black">Thank You!</h2>
+                <p className="mt-2 text-gray-600">{message}</p>
+              </>
+            ) : (
+              <>
+                <IoCloseCircleSharp size={64} className="text-[#DF2420]" />
+                <h2 className="text-xl sm:text-2xl font-semibold mt-4 text-black">Oops!</h2>
+                <p className="mt-2 text-gray-600">{message}</p>
+              </>
+            )}
           </div>
         )}
         {!isLoading && !message && (
