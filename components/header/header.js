@@ -98,7 +98,7 @@ const Header = () => {
           </Navbar.Brand> */}
         </div>
 
-        <div className={`${headerStyle.btnContainer} w-36 h-11`}>
+        <div className={`${headerStyle.btnContainer} w-[7rem] md:w-36 lg:w-36 h-11`}>
           <Button
             externalClass={`text-white font-semibold py-2 px-4 rounded hover:scale-105 rounded ${headerStyle.patternPrimaryBtn}`}
             buttonText={`Join Waitlist`}

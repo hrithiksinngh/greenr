@@ -77,10 +77,10 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
 
   if (!isOpen) return null;
 
-  const inputClasses = "block px-3 py-3 w-full text-sm text-gray-900 bg-transparent rounded border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black placeholder-[#b2b2b2]"
+  const inputClasses = "block px-3 py-3 w-full text-sm text-[#000000CC] bg-transparent rounded border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:ring-[#000000CC] focus:border-[#000000CC] placeholder-[#b2b2b2]"
 
   const LabelWithAsterisk = ({ children, required }) => (
-    <label className="absolute text-xs text-gray-500 bg-white px-1 top-[-0.5rem] left-3 z-10">
+    <label className="absolute text-sm text-[#00000099] bg-white px-1 top-[-0.6rem] left-3 z-10">
       {children}
       {required && <span className="text-[#DA1212]">*</span>}
     </label>
@@ -133,12 +133,16 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
       exit="exit"
     >
       <div className="flex justify-between items-center p-4 sm:p-6 relative">
-        <button onClick={() => setIsOpen(false)} className="absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600">
-          <IoClose size={24} className="sm:w-9 sm:h-9" />
-        </button>
-        <h2 className={`text-xl sm:text-2xl font-semibold w-full text-center ${getHeadingClass()}`}>
-          {getHeadingText()}
-        </h2>
+        {!isLoading && (
+          <button onClick={() => setIsOpen(false)} className="absolute right-4 sm:right-8 text-gray-400 hover:text-gray-600">
+            <IoClose size={24} className="sm:w-9 sm:h-9" />
+          </button>
+        )}
+        {!isLoading && (
+          <h2 className={`text-xl sm:text-2xl font-semibold w-full text-center ${getHeadingClass()}`}>
+            {getHeadingText()}
+          </h2>
+        )}
       </div>
 
       <div className="p-6 md:pt-0 sm:p-12 sm:pt-0 sm:pb-8">
@@ -244,12 +248,15 @@ export default function LetsConnectModal({ isOpen, setIsOpen }) {
       exit="exit"
     >
       <div className="flex justify-between items-center p-4 relative">
-        <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600">
-          <IoClose size={24} />
-        </button>
-        <h2 className={`text-xl font-semibold w-full text-center ${getHeadingClass()}`}>
-          {getHeadingText()}
-        </h2>
+        {!isLoading && (
+          <button onClick={() => setIsOpen(false)} className="absolute right-4 text-gray-400 hover:text-gray-600">
+            <IoClose size={24} />
+          </button>)}
+        {!isLoading && (
+          <h2 className={`text-xl font-semibold w-full text-center ${getHeadingClass()}`}>
+            {getHeadingText()}
+          </h2>
+        )}
       </div>
 
       <div className="p-6 pb-8 pt-0">
