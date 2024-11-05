@@ -235,7 +235,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                   />
                   <Desc
                     externalClass={`text-white pb-8 lg:pb40`}
-                    desc={`${matchedPortfolio?.geographiesServedText} : ${matchedPortfolio?.geographiesServed}`}
+                    desc={`Location : ${matchedPortfolio?.geographiesServed}`}
                   />
                   <button
                     className={`hidden lg:block bg-[#4d7297] mt-4 lg:mt20 font-semibold rounded text-sm lg:f18 rounded text-white px-6 lg:px-8 py-2 lg:py-3`}
