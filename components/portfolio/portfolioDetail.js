@@ -20,7 +20,7 @@ import ClockDollarIcon from '../../assets/svgs/clock-dollar.svg';
 const PortfolioDetail = ({ portfolioName }) => {
 
   const { isLoading, data: portfolioData } = UseOurPortfolioData();
-  const { isLoading: foundersCarouselLoading, data: foundersCarouselData } = UseFoundersCarouselData();
+  // const { isLoading: foundersCarouselLoading, data: foundersCarouselData } = UseFoundersCarouselData();
   const [matchedPortfolio, setMatchedPortfolio] = useState(null);
   const [similarCompanies, setSimilarCompanies] = useState([]);
 
@@ -42,15 +42,16 @@ const PortfolioDetail = ({ portfolioName }) => {
     );
   }, []);
 
-  useEffect(() => {
-    if (foundersCarouselData?.data?.response?.length > 0 && matchedPortfolio) {
-      // setFoundersCarouselSlides(foundersCarouselData?.data?.response);
-      const filteredSlides = foundersCarouselData?.data?.response.filter(slide => 
-        slide.startupTitle === matchedPortfolio?.startupTitle
-      );
-      setFoundersCarouselSlides(filteredSlides);
-    }
-  }, [foundersCarouselData, matchedPortfolio]);
+  // useEffect(() => {
+  //   if (foundersCarouselData?.data?.response?.length > 0 && matchedPortfolio) {
+  //     // setFoundersCarouselSlides(foundersCarouselData?.data?.response);
+  //     const filteredSlides = foundersCarouselData?.data?.response.filter(slide => 
+  //       slide.startupTitle === matchedPortfolio?.startupTitle
+  //     );
+  //     console.log("filteredSlides", filteredSlides)
+  //     setFoundersCarouselSlides(filteredSlides);
+  //   }
+  // }, [foundersCarouselData, matchedPortfolio]);
 
   useEffect(() => {
     if (!isLoading && portfolioData?.data?.response) {
@@ -83,6 +84,44 @@ const PortfolioDetail = ({ portfolioName }) => {
       });
 
       setKeyMileStoneList(milestoneList);
+
+      const foundersCarouselData = [
+        {
+          name: matchingPortfolio?.founderName1,
+          description: matchingPortfolio?.founderDescription1,
+          image: matchingPortfolio?.founderImage1
+        },
+        {
+          name: matchingPortfolio?.founderName2,
+          description: matchingPortfolio?.founderDescription2,
+          image: matchingPortfolio?.founderImage2
+        },
+        {
+          name: matchingPortfolio?.founderName3,
+          description: matchingPortfolio?.founderDescription3,
+          image: matchingPortfolio?.founderImage3
+        },
+        {
+          name: matchingPortfolio?.founderName4,
+          description: matchingPortfolio?.founderDescription4,
+          image: matchingPortfolio?.founderImage4
+        },
+        {
+          name: matchingPortfolio?.founderName5,
+          description: matchingPortfolio?.founderDescription5,
+          image: matchingPortfolio?.founderImage5
+        }
+      ]
+
+      let foundersCarouselSlidesList = [];
+
+      foundersCarouselData.forEach(founder => {
+        if (founder.name) {
+          foundersCarouselSlidesList.push(founder);
+        }
+      })
+
+      setFoundersCarouselSlides(foundersCarouselSlidesList);
 
       let offeringCardsData = [];
       if (matchingPortfolio?.productOfferings) {
@@ -311,7 +350,7 @@ const PortfolioDetail = ({ portfolioName }) => {
             <MarqueeNew imgSrcList={ourPartnerImgData} />
           </div>}
 
-          {!foundersCarouselLoading && foundersCarouselData?.data?.response?.length > 0 && foundersCarouselSlides?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
+          {foundersCarouselSlides?.length > 0 && <div className="flex items-center justify-center bg-gray-100">
             <Carousel handleConnect={() => setIsOpen(true)} slides={foundersCarouselSlides} />
           </div>}
 
