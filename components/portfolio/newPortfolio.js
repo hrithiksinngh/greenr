@@ -591,49 +591,38 @@ export default function ProductListing() {
                         {openSections.sectors && (
                           <div className="mt-2 space-y-2">
                             {dynamicFilters.sectors.map(sector => (
-                              <label key={sector} className="flex items-center text-xs">
-                                <input
-                                  type="checkbox"
-                                  className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                                  checked={selectedFilters.sectors?.includes(sector) || false}
-                                  onChange={() => handleFilterChange('sectors', sector)}
-                                />
-                                {sector}
-                              </label>
+                              <div key={sector}>
+                                <label className="flex items-center text-xs">
+                                  <input
+                                    type="checkbox"
+                                    className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                                    checked={selectedFilters.sectors?.includes(sector) || false}
+                                    onChange={() => handleFilterChange('sectors', sector)}
+                                  />
+                                  {sector}
+                                </label>
+                                
+                                {/* Show subsectors only when sector is selected */}
+                                {selectedFilters.sectors?.includes(sector) && dynamicFilters.subSectors[sector] && (
+                                  <div className="ml-6 mt-2 space-y-2">
+                                    {dynamicFilters.subSectors[sector].map(subSector => (
+                                      <label key={subSector} className="flex items-center text-xs">
+                                        <input
+                                          type="checkbox"
+                                          className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                                          checked={selectedFilters[sector]?.includes(subSector) || false}
+                                          onChange={() => handleFilterChange(sector, subSector)}
+                                        />
+                                        {subSector}
+                                      </label>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
                             ))}
                           </div>
                         )}
                       </div>
-                      <hr className="border-gray-200 mb-6" />
-
-                      {/* SubSectors filter */}
-                      {Object.entries(dynamicFilters.subSectors).map(([sector, subSectors], index, array) => (
-                        <div key={sector}>
-                          <div className="mb-6">
-                            <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleSection('subSectors', sector)}>
-                              <h3 className="">{sector}</h3>
-                              {openSections.subSectors[sector] ? <LightChevronDown /> : <LightChevronRight />}
-                            </div>
-                            {openSections.subSectors[sector] && (
-                              <div className="mt-2 space-y-2">
-                                {subSectors.map(subSector => (
-                                  <label key={subSector} className="flex items-center text-xs">
-                                    <input
-                                      type="checkbox"
-                                      className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                                      checked={selectedFilters[sector]?.includes(subSector) || false}
-                                      onChange={() => handleFilterChange(sector, subSector)}
-                                    />
-                                    {subSector}
-                                  </label>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                          {/* Add a divider after each sector except the last one */}
-                          {index < array.length - 1 && <hr className="border-gray-200 mb-6" />}
-                        </div>
-                      ))}
                     </div>
                   </div>
                 </div>
