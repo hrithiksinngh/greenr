@@ -136,13 +136,21 @@ const TestimonialCarousel = ({ testimonials }) => {
 
   return (
     <div className="w-full overflow-hidden">
+      <div className="grid-main-container flex justify-between items-center mb-10 px-4">
+        <h1 className="text-3xl font-bold">{testimonials[0].testimonialsHeading || 'Entrepreneur Wins Testimonials'}</h1>
+        <div className="hidden sm:flex space-x-4">
+          <ArrowButton direction="left" onClick={prevTestimonial} disabled={isAtStart} />
+          <ArrowButton direction="right" onClick={nextTestimonial} disabled={isAtEnd} />
+        </div>
+      </div>
       <div 
         ref={carouselRef}
         className="px-4 sm:flex sm:space-x-4 sm:px-10 sm:pb-4 sm:overflow-x-auto hide-scrollbar"
       >
         {testimonials?.map((testimonial, index) => renderTestimonial(testimonial, index))}
       </div>
-      <div className="flex justify-center mt-4 space-x-4">
+      {/* Mobile arrows */}
+      <div className="flex sm:hidden justify-center mt-4 space-x-4">
         <ArrowButton direction="left" onClick={prevTestimonial} disabled={isAtStart} />
         <ArrowButton direction="right" onClick={nextTestimonial} disabled={isAtEnd} />
       </div>
