@@ -44,7 +44,7 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
     <input
       ref={searchInputRef}
       type="text"
-      placeholder='Search by Location'
+      placeholder='Search by State'
       className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
       value={searchTerm}
       onChange={handleSearchChange}
@@ -111,7 +111,7 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
         <input
           ref={searchInputRef}
           type="text"
-          placeholder='Search by Location'
+          placeholder='Search by State'
           className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
           value={inputValue}
           onChange={handleInputChange}
@@ -697,7 +697,7 @@ export default function ProductListing() {
                               className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
                               onClick={() => window.open(`/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`, '_blank', 'noopener noreferrer')}
                             >
-                              View Factsheet
+                              Know More
                               <FaChevronRight className="ml-1 sm:ml-2" size={10} />
                             </button>
                           )}

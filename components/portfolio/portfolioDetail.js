@@ -140,11 +140,11 @@ const PortfolioDetail = ({ portfolioName }) => {
 
       const infoItemsData = [
         { icon: BsGrid1X2Fill, title: "Commercial Capacity of Manufacturing Unit", value: matchingPortfolio?.commercialCapacityOfManufacturingUnit },
-        { icon: BsGeoAltFill, title: "Location", value: matchingPortfolio?.location },
+        { icon: BsGeoAltFill, title: "Headquartered In", value: matchingPortfolio?.headquarteredIn },
         { icon: BsFileEarmarkCheckFill, title: "IP / Certificate", value: matchingPortfolio?.intellectualPropertyOrCertificates },
         { icon: BsClockFill, title: "Average Project Turnaround Time", value: matchingPortfolio?.averageProjectTurnaroundTime },
-        { icon: MdOutlineCurrencyRupee, title: "Pricing", value: matchingPortfolio?.productPricing },
-        { icon: 'clock-dollar', title: "Credit Period", value: matchingPortfolio?.creditPeriod }
+        { icon: MdOutlineCurrencyRupee, title: "Funds Raised", value: matchingPortfolio?.fundsRaised },
+        { icon: 'clock-dollar', title: "Awards and Recognition", value: matchingPortfolio?.awardsAndRecognition }
       ]
       setInfoItems(infoItemsData)
 
@@ -235,7 +235,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                   />
                   <Desc
                     externalClass={`text-white pb-8 lg:pb40`}
-                    desc={`Location : ${matchedPortfolio?.geographiesServed}`}
+                    desc={`Geographies Served : ${matchedPortfolio?.geographiesServed}`}
                   />
                   <button
                     className={`hidden lg:block bg-[#4d7297] mt-4 lg:mt20 font-semibold rounded text-sm lg:f18 rounded text-white px-6 lg:px-8 py-2 lg:py-3`}

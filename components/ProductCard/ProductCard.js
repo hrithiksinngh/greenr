@@ -47,7 +47,7 @@ const ProductCard = ({ product, view }) => {
             <p className="text-xs text-[#00000099] mb-4 flex-grow" style={descriptionStyle}>{product.businessDescription}</p>
             {product.isFactsheetAvailable !== 'No' && (
               <button className="bg-[#4d7297] text-white px-4 py-2 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-xs font-semibold mt-auto w-fit" onClick={() => window.open(`/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`, '_blank', 'noopener noreferrer')}>
-                View Factsheet
+                Know More
                 <FaChevronRight className="ml-2" size={10} />
               </button>
             )}
@@ -76,7 +76,7 @@ const ProductCard = ({ product, view }) => {
             <p className="text-xs text-[#00000099] mb-4 flex-grow" style={descriptionStyle}>{product.businessDescription}</p>
             {product.isFactsheetAvailable !== 'No' && (
               <button className="bg-[#4d7297] text-white px-4 py-2 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-xs mt-auto" onClick={() => window.open(`/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`, '_blank', 'noopener noreferrer')}>
-                View Factsheet
+                Know More
                 <FaChevronRight className="ml-2" size={10} />
               </button>
             )}
