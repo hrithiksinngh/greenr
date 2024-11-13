@@ -3,7 +3,7 @@ import Title from "../../components/title/title";
 import { useEffect, useState } from "react";
 import animation from "../../utils/animation";
 import Stats from "../../components/stats/stats";
-import { BsGrid1X2Fill, BsGeoAltFill, BsFileEarmarkCheckFill, BsClockFill, BsCashStack, BsCurrencyDollar } from 'react-icons/bs'
+import { BsGrid1X2Fill, BsGeoAltFill, BsFileEarmarkCheckFill, BsClockFill, BsCashStack, BsCurrencyDollar, BsInfoCircle } from 'react-icons/bs'
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import Carousel from "../FoundersCarousel";
 import LetsConnectModal from "../LetsConnectModal";
@@ -68,10 +68,26 @@ const PortfolioDetail = ({ portfolioName }) => {
       let milestoneList = [];
       
       const milestones = [
-        { value: matchingPortfolio?.milestoneOneValue, desc: matchingPortfolio?.milestoneOneDescription },
-        { value: matchingPortfolio?.milestoneTwoValue, desc: matchingPortfolio?.milestoneTwoDescription },
-        { value: matchingPortfolio?.milestoneThreeValue, desc: matchingPortfolio?.milestoneThreeDescription },
-        { value: matchingPortfolio?.milestoneFourValue, desc: matchingPortfolio?.milestoneFourDescription }
+        { 
+          value: matchingPortfolio?.milestoneOneValue, 
+          desc: matchingPortfolio?.milestoneOneDescription,
+          disclaimer: matchingPortfolio?.milestoneOneDisclaimer 
+        },
+        { 
+          value: matchingPortfolio?.milestoneTwoValue, 
+          desc: matchingPortfolio?.milestoneTwoDescription,
+          disclaimer: matchingPortfolio?.milestoneTwoDisclaimer
+        },
+        { 
+          value: matchingPortfolio?.milestoneThreeValue, 
+          desc: matchingPortfolio?.milestoneThreeDescription,
+          disclaimer: matchingPortfolio?.milestoneThreeDisclaimer
+        },
+        { 
+          value: matchingPortfolio?.milestoneFourValue, 
+          desc: matchingPortfolio?.milestoneFourDescription,
+          disclaimer: matchingPortfolio?.milestoneFourDisclaimer
+        }
       ];
 
       milestones.forEach(milestone => {
@@ -79,6 +95,7 @@ const PortfolioDetail = ({ portfolioName }) => {
           milestoneList.push({
             title: milestone.value,
             desc: milestone.desc,
+            disclaimer: milestone.disclaimer
           });
         }
       });
@@ -265,15 +282,32 @@ const PortfolioDetail = ({ portfolioName }) => {
           {keyMileStoneList?.length > 0 && (
             <div className="grid-main-container pt-12 lg:pt80">
               <div className="grid-container">
-                <div className="statsContainer pt-8 lg:pt30 pb-8 lg:pb30 overflow-hidden">
+                <div className="statsContainer pt-8 lg:pt30 pb-8 lg:pb30">
                   <div className={`relative grid p-3 grid-cols-1 lg:grid-cols-${Math.min(keyMileStoneList.length, 4)} gap-6 lg:gap-10`}>
                     {keyMileStoneList.map((statsData, i) => (
-                      <Stats
-                        key={i}
-                        statsTitle={statsData.title}
-                        statsDesc={statsData.desc}
-                        hiddenAnimation={false}
-                      />
+                      <div key={i} className="relative group">
+                        <Stats
+                          statsTitle={
+                            <div className="flex items-center gap-2">
+                              {statsData.title}
+                              {statsData.disclaimer && (
+                                <div className="relative inline-block">
+                                  <BsInfoCircle className="text-[#6B9080] w-3.5 h-3.5 cursor-help opacity-80 hover:opacity-100" />
+                                  <div className="invisible group-hover:visible absolute left-1/2 transform -translate-x-1/2 w-64 bg-white text-gray-700 text-xs rounded-md p-3 transition-all duration-200 z-[100] shadow-lg border border-gray-200"
+                                       style={{ 
+                                         bottom: 'calc(100% + 10px)'
+                                       }}>
+                                    <p className="italic">{statsData.disclaimer}</p>
+                                    <div className="absolute left-1/2 top-full transform -translate-x-1/2 border-solid border-t-white border-t-8 border-x-transparent border-x-8 border-b-0 drop-shadow"></div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          }
+                          statsDesc={statsData.desc}
+                          hiddenAnimation={false}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
