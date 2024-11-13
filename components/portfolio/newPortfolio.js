@@ -44,7 +44,7 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
     <input
       ref={searchInputRef}
       type="text"
-      placeholder='Search by State'
+      placeholder='Search by State/Company'
       className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
       value={searchTerm}
       onChange={handleSearchChange}
@@ -60,15 +60,40 @@ const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searc
   </div>
 );
 
-// First, add this new component near the top of the file, after other component imports
-const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, onStateSelect }) => {
+// Add this import at the top of the file
+import { IoLocationOutline } from "react-icons/io5";
+
+// Update the StateSearchDropdown component
+const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, portfolioData, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const dropdownRef = useRef(null);
   
-  const filteredStates = statesAndUtsData?.filter(state =>
-    state.toLowerCase().includes(inputValue.toLowerCase())
-  ) || [];
+  // Modified getFilteredResults to prioritize companies
+  const getFilteredResults = () => {
+    const companies = (portfolioData?.data?.response || [])
+      .map(item => ({
+        value: item.startupTitle,
+        type: 'company'
+      }))
+      .filter(item => 
+        item.value.toLowerCase().includes(inputValue.toLowerCase())
+      );
+
+    const states = (statesAndUtsData || [])
+      .map(state => ({
+        value: state,
+        type: 'state'
+      }))
+      .filter(item =>
+        item.value.toLowerCase().includes(inputValue.toLowerCase())
+      );
+    
+    // Combine results with companies first
+    return [...companies, ...states];
+  };
+
+  const filteredResults = getFilteredResults();
 
   // Add useEffect for click outside handling
   useEffect(() => {
@@ -89,9 +114,9 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
     setIsOpen(true);
   };
 
-  const handleStateClick = (state) => {
-    setInputValue(state);
-    onStateSelect(state);
+  const handleItemClick = (item) => {
+    setInputValue(item.value);
+    onSelect(item.value);
     setIsOpen(false);
   };
 
@@ -111,8 +136,8 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
         <input
           ref={searchInputRef}
           type="text"
-          placeholder='Search by State'
-          className="w-full pl-8 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
+          placeholder={'Search by Company/State'}
+          className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
           value={inputValue}
           onChange={handleInputChange}
           onFocus={() => setIsOpen(true)}
@@ -129,18 +154,47 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
       
       {isOpen && inputValue && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-          {filteredStates?.length > 0 ? (
-            filteredStates.map((state) => (
-              <div
-                key={state}
-                className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleStateClick(state)}
-              >
-                {state}
-              </div>
-            ))
+          {filteredResults.length > 0 ? (
+            <>
+              {/* Companies Section */}
+              {filteredResults.some(item => item.type === 'company') && (
+                <div className="px-4 py-1.5 bg-gray-50 text-gray-500 text-[10px] font-medium uppercase">
+                  Companies
+                </div>
+              )}
+              {filteredResults
+                .filter(item => item.type === 'company')
+                .map((item) => (
+                  <div
+                    key={item.value}
+                    className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer flex items-center"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    {item.value}
+                  </div>
+                ))}
+
+              {/* States Section */}
+              {filteredResults.some(item => item.type === 'state') && (
+                <div className="px-4 py-1.5 bg-gray-50 text-gray-500 text-[10px] font-medium uppercase">
+                  States
+                </div>
+              )}
+              {filteredResults
+                .filter(item => item.type === 'state')
+                .map((item) => (
+                  <div
+                    key={item.value}
+                    className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer flex items-center"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <IoLocationOutline className="mr-2 text-gray-500" size={14} />
+                    {item.value}
+                  </div>
+                ))}
+            </>
           ) : (
-            <div className="px-4 py-2 text-xs text-gray-500">No states found</div>
+            <div className="px-4 py-2 text-xs text-gray-500">No results found</div>
           )}
         </div>
       )}
@@ -286,10 +340,14 @@ export default function ProductListing() {
   // Modify the filteredProducts calculation
   const filteredProducts = sortProducts(
     (portfolioData?.data?.response || []).filter(product => {
-      // First check search term
+      // Check search term
       if (searchTerm) {
-        return product.states && product.states.split(',').map(s => s.trim()).some(state => 
-          state.toLowerCase() === searchTerm.toLowerCase()
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          // Check states
+          (product.states && product.states.split(',').map(s => s.trim().toLowerCase()).includes(searchLower)) ||
+          // Check startup title
+          product.startupTitle.toLowerCase().includes(searchLower)
         );
       }
 
@@ -431,7 +489,8 @@ export default function ProductListing() {
                       handleClearSearch={handleClearSearch}
                       searchInputRef={searchInputRef}
                       statesAndUtsData={statesAndUtsData?.data?.response}
-                      onStateSelect={handleStateSelect}
+                      portfolioData={portfolioData}
+                      onSelect={(item) => setSearchTerm(item)}
                     />
                   </div>
 
@@ -536,7 +595,8 @@ export default function ProductListing() {
                         handleClearSearch={handleClearSearch}
                         searchInputRef={searchInputRef}
                         statesAndUtsData={statesAndUtsData?.data?.response}
-                        onStateSelect={handleStateSelect}
+                        portfolioData={portfolioData}
+                        onSelect={(item) => setSearchTerm(item)}
                       />
                     </div>
 
@@ -753,7 +813,8 @@ export default function ProductListing() {
                     handleClearSearch={handleClearSearch}
                     searchInputRef={searchInputRef}
                     statesAndUtsData={statesAndUtsData?.data?.response}
-                    onStateSelect={handleStateSelect}
+                    portfolioData={portfolioData}
+                    onSelect={(item) => setSearchTerm(item)}
                   />
                 </div>
 
