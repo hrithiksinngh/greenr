@@ -246,7 +246,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                 </div>
                 <div className={`col-span-1 lg:col-span-2 rightCol pl-2 flex justify-center`}>
                   <div className="lg:m-auto lg:my-24">
-                    <StackedImage img={matchedPortfolio?.productImage} />
+                    <StackedImage productImages={matchedPortfolio?.otherProductImages} mainImage={matchedPortfolio?.productImage} />
                   </div>
                 </div>
               </div>
