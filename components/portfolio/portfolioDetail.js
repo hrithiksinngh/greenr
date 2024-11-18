@@ -15,7 +15,8 @@ import { UseOurPortfolioData, UseFoundersCarouselData } from "../../utils/portfo
 import MarqueeNew from "../marquee/marqueeNew";
 import { ThreeDots } from "react-loader-spinner";
 import Image from 'next/image';
-import ClockDollarIcon from '../../assets/svgs/clock-dollar.svg';
+// import ClockDollarIcon from '../../assets/svgs/clock-dollar.svg';
+import TrophyIcon from '../../assets/Images/trophy.png';
 
 const PortfolioDetail = ({ portfolioName }) => {
 
@@ -161,9 +162,10 @@ const PortfolioDetail = ({ portfolioName }) => {
         { icon: BsFileEarmarkCheckFill, title: "IP / Certificate", value: matchingPortfolio?.intellectualPropertyOrCertificates },
         { icon: BsClockFill, title: "Average Project Turnaround Time", value: matchingPortfolio?.averageProjectTurnaroundTime },
         { icon: MdOutlineCurrencyRupee, title: "Funds Raised", value: matchingPortfolio?.fundsRaised },
-        { icon: 'clock-dollar', title: "Awards and Recognition", value: matchingPortfolio?.awardsAndRecognition }
+        { icon: 'trophy', title: "Awards and Recognition", value: matchingPortfolio?.awardsAndRecognition }
       ]
-      setInfoItems(infoItemsData)
+      const filteredInfoItemsData = infoItemsData.filter(item => item.value);
+      setInfoItems(filteredInfoItemsData)
 
       let partnerImgData = matchingPortfolio?.cooperatesWorkedWith?.split(',');
       setOurPartnerImgData(partnerImgData)
@@ -338,8 +340,8 @@ const PortfolioDetail = ({ portfolioName }) => {
                 {infoItems.map((item, index) => (
                   <div key={index} className={`flex items-center space-x-4 relative p-4 lg:p-6 pb-3 pl-0 ${index % 2 !== 0 ? 'md:pl-10' : ''}`}>
                     <div className={`bg-[#6B9080] p-2 lg:p-3 rounded-full`}>
-                      {item.icon === 'clock-dollar' ? (
-                        <Image src={ClockDollarIcon} alt="Clock Dollar Icon" width={24} height={24} className="text-white" />
+                      {item.icon === 'trophy' ? (
+                        <Image src={TrophyIcon} alt="Clock Dollar Icon" width={24} height={24} className="text-white" />
                       ) : (
                         <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                       )}
