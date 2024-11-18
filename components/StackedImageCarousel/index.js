@@ -25,7 +25,7 @@ const StackedImage = (props) => {
   const renderImageCount = () => {
     if (totalImages <= 1) return null;
     return (
-      <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 px-2 py-1 rounded text-white text-xs z-30">
+      <div className="absolute bottom-3 right-3 bg-black bg-opacity-60 px-2 py-1 rounded text-white text-xs z-30">
         More {totalImages - 1}+
       </div>
     );
