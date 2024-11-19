@@ -295,7 +295,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                               {statsData.title}
                               {statsData.disclaimer && (
                                 <div className="relative inline-block">
-                                  <BsInfoCircle className="text-[#6B9080] w-3.5 h-3.5 cursor-help opacity-80 hover:opacity-100" />
+                                  <BsInfoCircle className="text-[#6B9080] w-4 h-4 cursor-help opacity-80 hover:opacity-100" />
                                   <div className="invisible group-hover:visible absolute left-1/2 transform -translate-x-1/2 w-64 bg-white text-gray-700 text-xs rounded-md p-3 transition-all duration-200 z-[100] shadow-lg border border-gray-200"
                                        style={{ 
                                          bottom: 'calc(100% + 10px)'
