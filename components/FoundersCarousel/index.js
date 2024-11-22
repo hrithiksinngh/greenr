@@ -18,13 +18,16 @@ const Carousel = (props) => {
     }
   }, [isChanging]);
 
-  // Add new useEffect for auto-changing slides
+  // Modified useEffect for auto-changing slides
   useEffect(() => {
-    const autoChangeTimer = setInterval(() => {
-      nextSlide();
-    }, 4000);
+    // Only set up auto-change if there are multiple slides
+    if (slides.length > 1) {
+      const autoChangeTimer = setInterval(() => {
+        nextSlide();
+      }, 4000);
 
-    return () => clearInterval(autoChangeTimer);
+      return () => clearInterval(autoChangeTimer);
+    }
   }, [currentSlide]);
 
   const changeSlide = (index) => {
@@ -83,50 +86,58 @@ const Carousel = (props) => {
           </div>
         </div>
 
-        {/* Navigation buttons - desktop view (hidden on mobile) */}
-        <button
-          onClick={prevSlide}
-          className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
-        >
-          &#10094;
-        </button>
-        <button
-          onClick={nextSlide}
-          className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
-        >
-          &#10095;
-        </button>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-          {slides.map((_, index) => (
+        {/* Modified navigation buttons - desktop view */}
+        {slides.length > 1 && (
+          <>
             <button
-              key={index}
-              onClick={() => changeSlide(index)}
-              className={`w-4 md:w-6 h-0.5 mx-1 transition-all duration-300 ${
-                currentSlide === index ? 'bg-white' : 'bg-white/40'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+              onClick={prevSlide}
+              className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
+            >
+              &#10094;
+            </button>
+            <button
+              onClick={nextSlide}
+              className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl px-4 py-2"
+            >
+              &#10095;
+            </button>
+          </>
+        )}
+
+        {/* Modified navigation dots */}
+        {slides.length > 1 && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => changeSlide(index)}
+                className={`w-4 md:w-6 h-0.5 mx-1 transition-all duration-300 ${
+                  currentSlide === index ? 'bg-white' : 'bg-white/40'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Navigation buttons - mobile view (outside and below the container) */}
-      <div className="flex justify-center w-full mt-4 md:hidden">
-        <button
-          onClick={prevSlide}
-          className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center mr-4 shadow-md"
-        >
-          &#10094;
-        </button>
-        <button
-          onClick={nextSlide}
-          className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center shadow-md"
-        >
-          &#10095;
-        </button>
-      </div>
+      {/* Modified navigation buttons - mobile view */}
+      {slides.length > 1 && (
+        <div className="flex justify-center w-full mt-4 md:hidden">
+          <button
+            onClick={prevSlide}
+            className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center mr-4 shadow-md"
+          >
+            &#10094;
+          </button>
+          <button
+            onClick={nextSlide}
+            className="bg-white text-[#39546e] rounded-full w-10 h-10 flex items-center justify-center shadow-md"
+          >
+            &#10095;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

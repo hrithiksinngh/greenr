@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { FaChevronDown, FaChevronRight, FaSearch, FaList, FaFilter } from 'react-icons/fa'
 import { BsGrid } from 'react-icons/bs'
 import { MdOutlineSort, MdKeyboardArrowDown } from "react-icons/md";
@@ -69,49 +69,82 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
   const [inputValue, setInputValue] = useState('');
   const dropdownRef = useRef(null);
   
-  // Modified getFilteredResults to prioritize companies
-  const getFilteredResults = () => {
+  // Memoize getFilteredResults with improved filtering
+  const getFilteredResults = useCallback(() => {
+    if (!inputValue.trim()) return [];
+    
+    const searchWords = inputValue.toLowerCase().trim().split(/\s+/);
+    
+    // Create a Set to store unique values
+    const uniqueResults = new Set();
+    const results = [];
+
+    // Filter companies
     const companies = (portfolioData?.data?.response || [])
       .map(item => ({
         value: item.startupTitle,
         type: 'company'
       }))
-      .filter(item => 
-        item.value.toLowerCase().includes(inputValue.toLowerCase())
-      );
+      .filter(item => {
+        const words = item.value.toLowerCase().split(/\s+/);
+        const matches = searchWords.every(searchWord =>
+          words.some(word => word.startsWith(searchWord))
+        );
+        // Only include if it's not already in the results
+        if (matches && !uniqueResults.has(item.value)) {
+          uniqueResults.add(item.value);
+          return true;
+        }
+        return false;
+      });
 
+    // Filter states
     const states = (statesAndUtsData || [])
       .map(state => ({
         value: state,
         type: 'state'
       }))
-      .filter(item =>
-        item.value.toLowerCase().includes(inputValue.toLowerCase())
-      );
+      .filter(item => {
+        const words = item.value.toLowerCase().split(/\s+/);
+        const matches = searchWords.every(searchWord =>
+          words.some(word => word.startsWith(searchWord))
+        );
+        // Only include if it's not already in the results
+        if (matches && !uniqueResults.has(item.value)) {
+          uniqueResults.add(item.value);
+          return true;
+        }
+        return false;
+      });
     
-    // Combine results with companies first
-    return [...companies, ...states];
-  };
-
-  const filteredResults = getFilteredResults();
-
-  // Add useEffect for click outside handling
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+    // Combine and sort results
+    return [...companies, ...states].sort((a, b) => {
+      // Sort by type first (companies before states)
+      if (a.type !== b.type) {
+        return a.type === 'company' ? -1 : 1;
       }
-    }
+      // Then sort alphabetically within each type
+      return a.value.localeCompare(b.value);
+    });
+  }, [inputValue, portfolioData?.data?.response, statesAndUtsData]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  // Memoize filteredResults
+  const filteredResults = useMemo(() => getFilteredResults(), [getFilteredResults]);
+
+  // Sync inputValue with searchTerm prop
+  useEffect(() => {
+    setInputValue(searchTerm || '');
+  }, [searchTerm]);
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    setInputValue(newValue);
     setIsOpen(true);
+    
+    // Clear search if input is empty
+    if (!newValue.trim()) {
+      handleClearSearch();
+    }
   };
 
   const handleItemClick = (item) => {
@@ -166,7 +199,7 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
                 .filter(item => item.type === 'company')
                 .map((item) => (
                   <div
-                    key={item.value}
+                    key={`company-${item.value}`}
                     className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer flex items-center"
                     onClick={() => handleItemClick(item)}
                   >
@@ -184,7 +217,7 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
                 .filter(item => item.type === 'state')
                 .map((item) => (
                   <div
-                    key={item.value}
+                    key={`state-${item.value}`}
                     className="px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer flex items-center"
                     onClick={() => handleItemClick(item)}
                   >
@@ -301,30 +334,8 @@ export default function ProductListing() {
     }
   }, [portfolioData]);
 
-  // Modify the handleFilterChange function
-  const handleFilterChange = (category, value) => {
-    setSelectedFilters(prev => ({
-      ...prev,
-      [category]: prev[category] ?
-        prev[category].includes(value) ?
-          prev[category].filter(item => item !== value) :
-          [...prev[category], value] :
-        [value]
-    }));
-  };
-
-  const clearFilters = () => {
-    setSelectedFilters({});
-  };
-
-  const handleSortChange = (type) => {
-    console.log('handleSortChange called with:', type);
-    setSortBy(type);
-    setIsSortDropdownOpen(false);
-  };
-
-  // Add this function to sort the products
-  const sortProducts = (products) => {
+  // Memoize sortProducts function
+  const sortProducts = useCallback((products) => {
     if (sortBy === 'Type of Waste') {
       return products;
     }
@@ -335,60 +346,85 @@ export default function ProductListing() {
       if (!aHasType && bHasType) return 1;
       return 0;
     });
-  };
+  }, [sortBy]);
 
-  // Modify the filteredProducts calculation
-  const filteredProducts = sortProducts(
-    (portfolioData?.data?.response || []).filter(product => {
-      // Check search term
-      if (searchTerm) {
-        const searchLower = searchTerm.toLowerCase();
-        return (
-          // Check states
-          (product.states && product.states.split(',').map(s => s.trim().toLowerCase()).includes(searchLower)) ||
-          // Check startup title
-          product.startupTitle.toLowerCase().includes(searchLower)
-        );
-      }
-
-      // If no filters are selected and no search term, show all products
-      if (Object.values(selectedFilters).every(arr => arr.length === 0)) {
-        return true;
-      }
-
-      // Check if the product matches any of the selected filters
-      return Object.entries(selectedFilters).some(([category, values]) => {
-        if (values.length === 0) return false;
-        if (category === 'sectors') {
-          return values.includes(product.sector);
-        } else {
-          return values.some(value =>
-            product.subSector && product.subSector.split(',').map(s => s.trim()).includes(value)
+  // Memoize filteredProducts calculation
+  const filteredProducts = useMemo(() => {
+    return sortProducts(
+      (portfolioData?.data?.response || []).filter(product => {
+        if (searchTerm) {
+          const searchWords = searchTerm.toLowerCase().trim().split(/\s+/);
+          
+          const titleWords = product.startupTitle.toLowerCase().split(/\s+/);
+          const matchesTitle = searchWords.every(searchWord =>
+            titleWords.some(word => word.startsWith(searchWord))
           );
+
+          const stateMatches = product.states?.split(',').some(state => {
+            const stateWords = state.trim().toLowerCase().split(/\s+/);
+            return searchWords.every(searchWord =>
+              stateWords.some(word => word.startsWith(searchWord))
+            );
+          }) || false;
+
+          return matchesTitle || stateMatches;
         }
-      });
-    })
-  );
 
-  // Calculate total pages based on filtered products
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+        if (Object.values(selectedFilters).every(arr => arr.length === 0)) {
+          return true;
+        }
 
-  // Ensure currentPage is valid
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(Math.max(1, totalPages));
-    }
-  }, [currentPage, totalPages]);
+        return Object.entries(selectedFilters).some(([category, values]) => {
+          if (values.length === 0) return false;
+          if (category === 'sectors') {
+            return values.includes(product.sector);
+          } else {
+            return values.some(value =>
+              product.subSector && product.subSector.split(',').map(s => s.trim()).includes(value)
+            );
+          }
+        });
+      })
+    );
+  }, [portfolioData?.data?.response, searchTerm, selectedFilters, sortProducts]);
 
-  // Get the current page of products
-  const currentProducts = filteredProducts.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage
-  );
+  // Memoize currentProducts calculation
+  const currentProducts = useMemo(() => {
+    return filteredProducts.slice(
+      (currentPage - 1) * productsPerPage,
+      currentPage * productsPerPage
+    );
+  }, [filteredProducts, currentPage, productsPerPage]);
 
-  const handlePageChange = (page) => {
+  // Memoize totalPages calculation
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredProducts.length / productsPerPage);
+  }, [filteredProducts.length, productsPerPage]);
+
+  // Add necessary imports at the top of the file
+  const handleFilterChange = useCallback((category, value) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [category]: prev[category] ?
+        prev[category].includes(value) ?
+          prev[category].filter(item => item !== value) :
+          [...prev[category], value] :
+        [value]
+    }));
+  }, []);
+
+  const clearFilters = useCallback(() => {
+    setSelectedFilters({});
+  }, []);
+
+  const handleSortChange = useCallback((type) => {
+    setSortBy(type);
+    setIsSortDropdownOpen(false);
+  }, []);
+
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
 
   // Inside your component, before the return statement, add this custom icon:
   const ThinXIcon = () => (
