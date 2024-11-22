@@ -38,33 +38,24 @@ const truncateText = (text, maxLength) => {
 };
 
 // Add this new component for the mobile search
-const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef }) => (
-  <div className="relative w-full">
-    <CiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-    <input
-      ref={searchInputRef}
-      type="text"
-      placeholder='Search by State/Company'
-      className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-gray-300 text-xs placeholder:text-xs placeholder-[#00000080]"
-      value={searchTerm}
-      onChange={handleSearchChange}
-    />
-    {searchTerm && (
-      <button
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-        onClick={handleClearSearch}
-      >
-        <FaTimes size={16} />
-      </button>
-    )}
-  </div>
+const MobileSearch = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, portfolioData, onSelect }) => (
+  <StateSearchDropdown
+    searchTerm={searchTerm}
+    handleSearchChange={handleSearchChange}
+    handleClearSearch={handleClearSearch}
+    searchInputRef={searchInputRef}
+    statesAndUtsData={statesAndUtsData}
+    portfolioData={portfolioData}
+    onSelect={onSelect}
+    isMobile={true}
+  />
 );
 
 // Add this import at the top of the file
 import { IoLocationOutline } from "react-icons/io5";
 
 // Update the StateSearchDropdown component
-const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, portfolioData, onSelect }) => {
+const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch, searchInputRef, statesAndUtsData, portfolioData, onSelect, isMobile = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const dropdownRef = useRef(null);
@@ -186,7 +177,7 @@ const StateSearchDropdown = ({ searchTerm, handleSearchChange, handleClearSearch
       </div>
       
       {isOpen && inputValue && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className={`absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto ${isMobile ? 'fixed left-0 right-0 mx-4' : ''}`}>
           {filteredResults.length > 0 ? (
             <>
               {/* Companies Section */}
@@ -527,6 +518,7 @@ export default function ProductListing() {
                       statesAndUtsData={statesAndUtsData?.data?.response}
                       portfolioData={portfolioData}
                       onSelect={(item) => setSearchTerm(item)}
+                      isMobile={true}
                     />
                   </div>
 
@@ -633,6 +625,7 @@ export default function ProductListing() {
                         statesAndUtsData={statesAndUtsData?.data?.response}
                         portfolioData={portfolioData}
                         onSelect={(item) => setSearchTerm(item)}
+                        isMobile={true}
                       />
                     </div>
 
@@ -747,7 +740,7 @@ export default function ProductListing() {
                   {currentProducts.map(product => (
                     <div
                       key={product.timestamp}
-                      className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'} transform hover:-translate-y-1 hover:scale-[1.02]`}
+                      className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'} transform hover:-translate-y-1 hover:scale-[1.02] max-h-[550px]`}
                     >
                       <img
                         src={product.productImage}
@@ -758,7 +751,7 @@ export default function ProductListing() {
                         className={`p-4 sm:p-4 md:p-6 flex flex-col ${view === 'list' ? 'w-2/3' : 'w-full'}`}
                       >
                         <div className="flex flex-col h-full">
-                          <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2 mb-2 md:mb-4">
+                          {product.subSector && <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2 mb-2 md:mb-4">
                             {product.subSector.split(',').map(tag => (
                               <span
                                 key={tag}
@@ -767,7 +760,7 @@ export default function ProductListing() {
                                 {tag.trim()}
                               </span>
                             ))}
-                          </div>
+                          </div>}
                           <h3 className="font-semibold text-sm md:text-lg mb-1">{product.startupTitle}</h3>
                           <p
                             className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer"
@@ -777,18 +770,18 @@ export default function ProductListing() {
                             {product.companyName}
                           </p>
                           <p
-                            className="text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] mb-2 md:mb-4 line-clamp-2 overflow-hidden"
+                            className={`text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] ${product.isFactsheetAvailable !== 'No' ? 'line-clamp-3' : 'line-clamp-4'}`}
                             style={{
                               display: '-webkit-box',
-                              WebkitLineClamp: 2,
                               WebkitBoxOrient: 'vertical',
+                              WebkitLineClamp: product.isFactsheetAvailable !== 'No' ? 3 : 4
                             }}
                           >
                             {product.businessDescription}
                           </p>
                         </div>
-                        <div className="mt-auto">
-                          {product.isFactsheetAvailable !== 'No' && (
+                        {product.isFactsheetAvailable !== 'No' && (
+                          <div className="mt-auto pt-4">
                             <button
                               className="bg-[#4d7297] text-white px-3 py-1.5 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 rounded-md hover:bg-[#3d5a75] transition-colors duration-300 flex items-center text-[0.6rem] md:text-sm font-semibold w-fit"
                               onClick={() => window.open(`/portfolio/${product.startupTitle.toLowerCase().replace(/ /g, '-')}`, '_blank', 'noopener noreferrer')}
@@ -796,8 +789,8 @@ export default function ProductListing() {
                               Know More
                               <FaChevronRight className="ml-1 sm:ml-2" size={10} />
                             </button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -851,6 +844,7 @@ export default function ProductListing() {
                     statesAndUtsData={statesAndUtsData?.data?.response}
                     portfolioData={portfolioData}
                     onSelect={(item) => setSearchTerm(item)}
+                    isMobile={true}
                   />
                 </div>
 
