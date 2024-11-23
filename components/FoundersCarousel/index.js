@@ -57,7 +57,7 @@ const Carousel = (props) => {
       <div {...handlers} className="relative w-full h-full bg-[#39546e] text-white p-4 pb-16 pt-8 md:pt-32 md:p-32 md:pl-40 md:pb-28 flex flex-col md:flex-row justify-between items-center shadow-lg">
         {/* Image section */}
         <div className="relative w-full md:w-1/2 flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
-          <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'} w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full overflow-hidden border-8 border-[#6B9080] p-2`}>
+          <div className={`transition-opacity duration-500 ${isChanging ? 'opacity-0' : 'opacity-100'} w-[300px] h-[300px] md:w-[350px] md:h-[350px] rounded-full overflow-hidden border-8 border-[#6B9080] p-2`}>
             <div className="w-full h-full rounded-full overflow-hidden">
               <Image
                 src={slides[currentSlide]?.image}
