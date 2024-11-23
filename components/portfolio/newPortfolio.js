@@ -739,7 +739,7 @@ export default function ProductListing() {
                 >
                   {currentProducts.map(product => (
                     <div
-                      key={product.timestamp}
+                      key={product.startupTitle}
                       className={`bg-[#FFFFFF] border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex ${view === 'list' ? 'flex-row' : 'flex-col'} transform hover:-translate-y-1 hover:scale-[1.02] max-h-[550px]`}
                     >
                       <img
@@ -761,7 +761,7 @@ export default function ProductListing() {
                               </span>
                             ))}
                           </div>}
-                          <h3 className="font-semibold text-sm md:text-lg mb-1">{product.startupTitle}</h3>
+                          <h3 className="font-semibold text-sm md:text-[18px] mb-1">{product.startupTitle}</h3>
                           <p
                             className="text-[0.65rem] sm:text-xs md:text-sm text-[#3449B2] mb-1 md:mb-2 flex items-center cursor-pointer"
                             onClick={() => window.open(product.websiteLink, '_blank', 'noopener,noreferrer')}
@@ -770,7 +770,7 @@ export default function ProductListing() {
                             {product.companyName}
                           </p>
                           <p
-                            className={`text-[0.65rem] sm:text-xs md:text-sm text-[#00000099] ${product.isFactsheetAvailable !== 'No' ? 'line-clamp-3' : 'line-clamp-4'}`}
+                            className={`text-[0.65rem] sm:text-xs md:text-[14px] text-[#00000099] ${product.isFactsheetAvailable !== 'No' ? 'line-clamp-3' : 'line-clamp-4'}`}
                             style={{
                               display: '-webkit-box',
                               WebkitBoxOrient: 'vertical',
