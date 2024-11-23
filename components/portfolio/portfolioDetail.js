@@ -285,7 +285,7 @@ const PortfolioDetail = ({ portfolioName }) => {
           {keyMileStoneList?.length > 0 && (
             <div className="grid-main-container pt-12 lg:pt80">
               <div className="grid-container">
-                <div className="statsContainer pt-8 lg:pt30 pb-8 lg:pb30">
+                <div className="statsContainerDetailPage pt-8 lg:pt30 pb-8 lg:pb30">
                   <div className={`relative grid p-3 grid-cols-1 lg:grid-cols-${Math.min(keyMileStoneList.length, 4)} gap-6 lg:gap-10`}>
                     {keyMileStoneList.map((statsData, i) => (
                       <div key={i} className="relative group">
@@ -339,25 +339,25 @@ const PortfolioDetail = ({ portfolioName }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 mt-12 lg:mt-20">
                 {infoItems.map((item, index) => (
-                  <div key={index} className={`flex items-center space-x-4 relative p-4 lg:p-6 pb-3 pl-0 ${index % 2 !== 0 ? 'md:pl-10' : ''}`}>
-                    <div className={`bg-[#6B9080] p-2 lg:p-3 rounded-full`}>
+                  <div key={index} className={`flex items-start space-x-4 relative p-4 lg:p-6 pb-3 pl-0 ${index % 2 !== 0 ? 'md:pl-10' : ''}`}>
+                    <div className={`bg-[#6B9080] p-2 lg:p-3 rounded-full flex-shrink-0 mt-1`}>
                       {item.icon === 'reward' ? (
                         <Image src={RewardIcon} alt="Clock Dollar Icon" width={24} height={24} className="text-white" />
                       ) : (
                         <item.icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                       )}
                     </div>
-                    <div className="flex-grow mt-4 lg:mt-4">
-                      <p className="text-md lg:text-lg text-[#6B9080]">{item.title}</p>
-                      <p className="font-semibold text-gray-800 text-base text-sm md:text-md">{item.value || "N.A."}</p>
+                    <div className="flex-grow">
+                      <p className="text-md lg:text-lg text-[#6B9080] mb-1 mt-2.5">{item.title}</p>
+                      <p className="font-semibold text-gray-800 text-sm md:text-md break-words">{item.value || "N.A."}</p>
                     </div>
                     {/* Right border for left column items (desktop only) */}
                     {index % 2 === 0 && index < 5 && (
-                      <div className="hidden lg:block absolute right-[0] top-0 w-px h-full border-r border-dashed border-gray-300" />
+                      <div className="hidden md:block absolute right-0 top-0 w-px h-full border-r border-dashed border-gray-300" />
                     )}
-                    {/* Bottom border for all items except last row */}
-                    {index < 4 && (
-                      <div className="absolute left-0 bottom-[-0.75rem] w-full h-px border-b border-dashed border-gray-300" />
+                    {/* Bottom border - show for all items in mobile, only even indexes in desktop */}
+                    {((index < 4) || (index === 4 && index < infoItems.length - 1)) && (
+                      <div className={`absolute left-0 bottom-0 w-full h-px border-b border-dashed border-gray-300 ${index >= 4 ? 'md:hidden' : ''}`} />
                     )}
                   </div>
                 ))}
