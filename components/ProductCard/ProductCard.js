@@ -7,7 +7,7 @@ const ProductCard = ({ product, view }) => {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     display: '-webkit-box',
-    WebkitLineClamp: 6,
+    WebkitLineClamp: 7,
     WebkitBoxOrient: 'vertical',
     lineHeight: '1.2em',
     height: '100%',

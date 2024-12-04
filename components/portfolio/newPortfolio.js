@@ -774,7 +774,7 @@ export default function ProductListing() {
                             style={{
                               display: '-webkit-box',
                               WebkitBoxOrient: 'vertical',
-                              WebkitLineClamp: product.isFactsheetAvailable !== 'No' ? 3 : 4
+                              WebkitLineClamp: product.isFactsheetAvailable !== 'No' ? 3 : 7
                             }}
                           >
                             {product.businessDescription}
