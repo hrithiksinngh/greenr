@@ -146,13 +146,13 @@ const PortfolioDetail = ({ portfolioName }) => {
       if (matchingPortfolio?.productOfferings) {
         offeringCardsData.push({
           title: "Products Offered",
-          items: matchingPortfolio?.productOfferings?.split(',')
+          items: matchingPortfolio?.productOfferings?.split('$')
         })
       }
       if (matchingPortfolio?.serviceOfferings) {
         offeringCardsData.push({
           title: "Services Offered",
-          items: matchingPortfolio?.serviceOfferings?.split(',')
+          items: matchingPortfolio?.serviceOfferings?.split('$')
         })
       }
       setCards(offeringCardsData)
