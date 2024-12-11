@@ -348,7 +348,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                       )}
                     </div>
                     <div className="flex-grow">
-                      <p className="text-md lg:text-lg text-[#6B9080] mb-1 mt-2.5">{item.title}</p>
+                      <p className="font-semibold text-md lg:text-lg text-[#6B9080] mb-1 mt-2.5">{item.title}</p>
                       <p className="text-gray-800 text-sm md:text-md break-words">{item.value || "N.A."}</p>
                     </div>
                     {/* Right border for left column items (desktop only) */}
