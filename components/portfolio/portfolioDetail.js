@@ -168,7 +168,7 @@ const PortfolioDetail = ({ portfolioName }) => {
       const filteredInfoItemsData = infoItemsData.filter(item => item.value);
       setInfoItems(filteredInfoItemsData)
 
-      let partnerImgData = matchingPortfolio?.cooperatesWorkedWith?.split(',');
+      let partnerImgData = matchingPortfolio?.cooperatesWorkedWith ? matchingPortfolio?.cooperatesWorkedWith?.split(',') : [];
       setOurPartnerImgData(partnerImgData)
 
       // Get similar companies based on subsectors and sectors
@@ -349,7 +349,7 @@ const PortfolioDetail = ({ portfolioName }) => {
                     </div>
                     <div className="flex-grow">
                       <p className="text-md lg:text-lg text-[#6B9080] mb-1 mt-2.5">{item.title}</p>
-                      <p className="font-semibold text-gray-800 text-sm md:text-md break-words">{item.value || "N.A."}</p>
+                      <p className="text-gray-800 text-sm md:text-md break-words">{item.value || "N.A."}</p>
                     </div>
                     {/* Right border for left column items (desktop only) */}
                     {index % 2 === 0 && index < 5 && (
