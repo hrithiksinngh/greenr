@@ -168,7 +168,7 @@ const PortfolioDetail = ({ portfolioName }) => {
       const filteredInfoItemsData = infoItemsData.filter(item => item.value);
       setInfoItems(filteredInfoItemsData)
 
-      let partnerImgData = matchingPortfolio?.cooperatesWorkedWith ? matchingPortfolio?.cooperatesWorkedWith?.split(',') : [];
+      let partnerImgData = matchingPortfolio?.corporatesWorkedWith ? matchingPortfolio?.corporatesWorkedWith?.split(',') : [];
       setOurPartnerImgData(partnerImgData)
 
       // Get similar companies based on subsectors and sectors
