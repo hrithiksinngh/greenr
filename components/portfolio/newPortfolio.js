@@ -365,16 +365,17 @@ export default function ProductListing() {
           return true;
         }
 
-        return Object.entries(selectedFilters).some(([category, values]) => {
-          if (values.length === 0) return false;
-          if (category === 'sectors') {
-            return values.includes(product.sector);
-          } else {
-            return values.some(value =>
-              product.subSector && product.subSector.split(',').map(s => s.trim()).includes(value)
-            );
-          }
-        });
+        const sectorMatch = selectedFilters.sectors?.includes(product.sector);
+        const subSectorMatch = selectedFilters.subSectors?.some(value =>
+          product.subSector && product.subSector.split(',').map(s => s.trim()).includes(value)
+        );
+
+        // If subsectors are selected, only show products that match the subsectors
+        if (selectedFilters.subSectors?.length > 0) {
+          return subSectorMatch;
+        }
+
+        return sectorMatch || subSectorMatch;
       })
     );
   }, [portfolioData?.data?.response, searchTerm, selectedFilters, sortProducts]);
@@ -394,14 +395,27 @@ export default function ProductListing() {
 
   // Add necessary imports at the top of the file
   const handleFilterChange = useCallback((category, value) => {
-    setSelectedFilters(prev => ({
-      ...prev,
-      [category]: prev[category] ?
-        prev[category].includes(value) ?
-          prev[category].filter(item => item !== value) :
-          [...prev[category], value] :
-        [value]
-    }));
+    setSelectedFilters(prev => {
+      if (category === 'sectors') {
+        return {
+          ...prev,
+          [category]: prev[category] ?
+            prev[category].includes(value) ?
+              prev[category].filter(item => item !== value) :
+              [...prev[category], value] :
+            [value]
+        };
+      } else {
+        return {
+          ...prev,
+          subSectors: prev.subSectors ?
+            prev.subSectors.includes(value) ?
+              prev.subSectors.filter(item => item !== value) :
+              [...prev.subSectors, value] :
+            [value]
+        };
+      }
+    });
   }, []);
 
   const clearFilters = useCallback(() => {
@@ -699,8 +713,8 @@ export default function ProductListing() {
                                         <input
                                           type="checkbox"
                                           className="mr-2 rounded border-[#d9d9d9] text-[#6b9080] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                                          checked={selectedFilters[sector]?.includes(subSector) || false}
-                                          onChange={() => handleFilterChange(sector, subSector)}
+                                          checked={selectedFilters.subSectors?.includes(subSector) || false}
+                                          onChange={() => handleFilterChange('subSectors', subSector)}
                                         />
                                         {subSector}
                                       </label>
